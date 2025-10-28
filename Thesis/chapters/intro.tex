@@ -1,0 +1,20 @@
+\chapter{Introduction}
+Why is this an interesting topic?\\
+\textcolor{red}{Use some of project description here.}
+
+Why quantum computers over classical?\\
+
+What do we need for a quantum computer to work?\\
+To build a quantum machine in practice, we need a large number of qubits. The root of the issue is that quantum informaiton is extremely fragile. You can literally ruin it just by looking at it. Qubits are unstable and very vulnerable to noise that changes the value the qubit holds. We therefore wish to construct circuits of multiple qubits that work together to protect the information from errors, such that they form a single logical qubit that can have its errors located and corrected, making them more stable. The standard method of error correction that is used in all existing quantum computers \textcolor{red}{(find source for this)} is the \emph{surface code}. 
+
+Explain surface code here.\\
+
+
+What am I going to do?\\
+As a starting point for this project, I aim to recreate the work of Samuel Jacques, as laid out in his 2024 talk. 
+
+Jacques takes a very pessimistic view on the potential use cases for Grover's algorithm to break AES, by which I mean he believes these use cases are entirely nonexistent. His argument relies on a series of assumptions for this to be the case. In the beginning stages of this project, I will tackle these assumptions case by case and see if it changes the conclusion at all. Along the way, we will run into a number of topics that I am not really familiar with, and we will have to acquire some knowledge to say if the arguments presented by Jacques still hold in these alternative cases.
+
+For instance, if we work other error correcting codes like \emph{BB codes} or \emph{tile codes}, does that change the picture?
+
+

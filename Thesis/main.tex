@@ -1,0 +1,32 @@
+\documentclass[12pt,a4paper]{report}
+
+% Preamble files
+\input{preamble/packages}
+\input{preamble/macros}
+
+% Bibliography
+\addbibresource{refs.bib}
+
+\title{Master's Thesis}
+\author{Emma Storberg}
+\date{\today}
+
+\begin{document}
+
+\pagenumbering{roman}
+\maketitle
+\tableofcontents
+\clearpage
+
+\pagenumbering{arabic}
+
+% Chapters
+\include{chapters/intro}
+\include{chapters/background}
+\include{chapters/methods}
+\include{chapters/results}
+\include{chapters/conclusion}
+
+\printbibliography
+
+\end{document}
