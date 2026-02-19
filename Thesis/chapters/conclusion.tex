@@ -1,2 +1,26 @@
 \chapter{Conclusion}
 Summarize your findings and future work.
+
+\section{What is Jacques' full line of argumentation?}
+\todo[inline]{This section is not something I'm planning on including in the text, but I just put it here to save it as a reference for myself.}
+In the normal case when we would use Grover's algorithm, we assume no structure. The argument for there being security in this case is that the number of potential keys is so large that we would not be able to do a brute-force search attack on a classic computer in any reasonable amoutn of time (brute-force being the only option here beceause there is no structure to the problem or the way the keys are determined). The circuit for the quantum algorithm Grover's is such that we may have a speedup on the order of the square root. We also know (from my own previous work) that the runtime of Grover's scales with the number of Grover iterates, which themselves scale with the number of queries to the arbitrary funciton $f$, or the AES algorithm in our case, which is needed to see if a binary string $x$ is a solution. Each Grover iteration requires running the entire AES encryption circuit, and this is the costly part.
+
+There might also be constant factors here we don't know about, so to see the full picture, we need to know exactly how our $f$, namely AES, will be implemented in a circuit. Jacques provides a table of estimates of different values on page 20 of the PDF (slide 8 in the deck). The three quantities of apparent interest are Clifford gates (simple, computationally easy gates), T gates (a different type of gate that requires a huge number of qubits) and the depth, which I take to mean the number of gates that have to be applied serially, kind of functioning as a proxy for time (as they cannot be run in parallel). Finally, we have an estimate of a couple thousand logical qubits required for each size of AES in the table, but of course there could be millions of qubits hiding behind this number.
+
+We definitely need some form of error correction, since quantum computations are very prone to noise. But we are orders of magnitude off the number of physical qubits we need in order to be anywhere near the estimated number of necessary logical qubits.
+
+At this point, he introduces NIST's 2017 MAXDEPTH metric as a baseline for how many logical gates/operations the current quantum computing architectures perform serially over certain periods of time, like a year ($2^{40}$), a decade ($2^{64}$) or a millenium ($2^96$)\footnote{He also points out that this limit does not reflect decoherence concerns, i.e. the quantum state collapsing and quantum data disappearing.}. Additionally, he makes clear that any sort of realistic attack on AES would have to be parallelized. 
+%However, Grover doesn't parallelize well, as additional partitions add an overhead every time \todo{make a bigger section in background about this}(simple calculation/explanation on slide 33 in the deck). We could argue that since the classical cost is on the order of $2^{128}$ for AES-128 and Grover offers a square root speedup, the new cost will be $2^{64}$, with some small constant to account for overhead and setting up the quantum circuit. However, we have now shown that the bad parallelism of Grover means it is not on the order of $2^{64}$, and we have no idea what the constant will be if we use a different type of code other than surface codes.
+
+This paper will attempt to tackle just that. What happens if we use something else instead, and what might that be?
+
+\section{Future Work}\label{sec:future_work}
+Does the decoder we use for correcting errors matter at all and what is the efficiency/accuracy tradeoff?
+
+\section{Declaration of AI Usage}
+\todo[inline]{Rewrite this section into formal text.}
+I have used AI as an aid in coding and will probably continue to do so.\\
+I use it to learn things sometimes and provide intuitive explanations where I otherwise just have equations to study.\\
+I use it very minimally when writing, pretty much just when I can't remember a certain word or if I've used a word a lot and need a synonym (like a thesaurus).\\
+I use it as a search engine when I have complicated search terms that Google can't find for me.\\
+I ask it to format references from websites etc when there is not a downloadable option provided by the authors.\\

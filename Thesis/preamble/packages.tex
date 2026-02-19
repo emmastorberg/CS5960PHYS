@@ -6,6 +6,8 @@
 % page layout
 \usepackage[a4paper,margin=2.5cm]{geometry}
 \usepackage{microtype}
+\setlength{\parindent}{0pt} % no paragraph indentation
+\setlength{\parskip}{0.8\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip} % space between paragraphs
 \usepackage{setspace}
 \onehalfspacing
 
@@ -13,6 +15,9 @@
 \usepackage{amsmath,amssymb,mathtools}
 \usepackage{siunitx}
 \sisetup{separate-uncertainty=true}
+\usepackage{pifont}
+\usepackage{tikz}           % Draw quantum circuits 
+\usetikzlibrary{quantikz2,shapes,snakes}
 
 % figures and tables
 \usepackage{graphicx}
@@ -28,5 +33,10 @@
 \usepackage[english]{babel}
 \usepackage{csquotes}
 
+%tools
+\usepackage{todonotes}
+\usepackage{comment}
+
 % bibliography
-\usepackage[backend=biber,style=authoryear,sorting=nyt,maxcitenames=2,maxbibnames=99]{biblatex}
+\usepackage[sorting=none,backend=biber,style=numeric,doi=true,url=true]{biblatex}
+\addbibresource{refs.bib} % adjust path if needed

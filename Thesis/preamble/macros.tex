@@ -3,3 +3,15 @@
 \newcommand{\dd}{\mathrm{d}}
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+\tikzstyle{mybox} = [draw=blue!60, fill=blue!10, very thick,
+    rectangle, rounded corners, inner sep=10pt, inner ysep=20pt]
+\tikzstyle{fancytitle} =[fill=blue!60, text=white]
+
+\newcommand{\supervisors}[1]{%
+  \todo[color=green!25,linecolor=green!70]{#1}%
+  }
+
+\newcommand{\supervisorsinline}[1]{%
+  \todo[inline,color=green!25,linecolor=green!70]{#1}%
+}

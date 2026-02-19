@@ -1,2 +1,33 @@
 \chapter{Methods}\label{chap:methods}
-Describe your computational physics methods here.
+\todo[inline]{Unfinished section, not looking for supervisor feedback here yet.}
+The goal of this project is to simulate the circuitry of Grover's algorithm with two logical qubits, comparing how the circuit looks, the qubit requirements and overall complexity for a few different types of error correcting codes. Recall the expression for the unitary matrix defining an arbitrary quantum circuit:
+\[U \in \mathbb{C}^{2^n \times 2^n}.\]
+Given a gate set, we obtain $U$ by ``lifting'' the individual gate matrices to the appropriate dimension $2^n \times 2^n$ and multiplying them in the right order. 
+
+Noise is not a single perturbation at the end of our circuit, and other aspects like timing, decoherence and idle errors are completely lost\todo{Rewrite this sentence; doesn't make sense as is.}. Addressing all of these things\todo{change word} is very complex and not fully understood, but we still wish to use a different approach that takes into account some of them somehow... INTRODUCE TICK MODEL AND SEQUENTIAL APPLICATiON OF GATES!!
+
+\subsection{Error Models}
+Currently, the error model used is a time-step system, similar to video game logic that progresses with ticks to simulate time passing. Errors are modeled stochastically, with a fixed probability $p=0.01$ of occurring on any given qubit at any time step. Further improvements to this error model are discussed in \cref{sec:future_work}.
+
+\subsection{Software Aids}
+The software package PanQEC \cite{panqec2021} was used to visualize a few different kinds of error correcting codes. It also has functionality for determining logical operators of various types, which correct errors and perform small single-qubit computations. 
+
+As previously discussed, the challenge of doing operations on our fault-tolerantly stored data is multi-faceted. We need to figure out hwo to use gates to perform the computations we want, and then we need to realize those gates in the physical machinery. Fortunately for us, circuits for Grover's algorithm already exist and have even been implemented physically in Noisy Intermeidate-Scale Quantum (NISQ) computing setups (as opposed to fault-tolerant). There is no error correction taking place in the NISQ approach, but we still have a circuit that performs the operation we want.
+
+Synthetiq is another tool, which allows you to take any circuit and express it in terms of another limited gateset, such as Clifford+T (although it does support custom gatesets). HOWEVER; this does not take into account the fault-tolerant aspect of what we're doing, so we need a way to find a fault-tolerant circuit and simulate it.
+
+
+I am working with Panqec, which is a visualization tool developed by Arthur Pesak. IDeally, the method would be to use Panqec to visualize a couple different types of code, and then figure out ways to do logical operations on whatever I stabilize there.
+
+\section{Coding Fault-tolerant Quantum Memory}
+\subsection{Surface Code}
+The smallest possible surface code requires 17 qubits (or possibly 10, if you reuse one ancillary qubit for measurement rather than having 8 individual ones).
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.3]{figures/The-smallest-possible-surface-code-consisting-of-9-data-qubits-The-indicated-8.png}
+\end{figure}
+
+\subsection{BB Code}
+\textcite{liang2026selfdualbivariatebicyclecodes} have found all BB codes using less than 160 qubits. The smallest of these, the $[[16, 4, 4]]$-code, is the only option I have considered because otherwise I run into major memory issues.
+
+\section{Applying Gates to Error-correcting Patches}

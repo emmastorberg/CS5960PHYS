@@ -1,0 +1,504 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{symmetric}{online}{}{}
+      \list{organization}{1}{%
+        {Wikipedia}%
+      }
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{title}{Symmetric-key algorithms}
+      \verb{urlraw}
+      \verb https://en.wikipedia.org/wiki/Symmetric-key_algorithm
+      \endverb
+      \verb{url}
+      \verb https://en.wikipedia.org/wiki/Symmetric-key_algorithm
+      \endverb
+    \endentry
+    \entry{aes}{misc}{}{}
+      \name{author}{5}{}{%
+        {{hash=91348c04260bd8fbee564adff6c9431e}{%
+           family={Standards},
+           familyi={S\bibinitperiod},
+           given={National\bibnamedelima Institute},
+           giveni={N\bibinitperiod\bibinitdelim I\bibinitperiod},
+           prefix={of},
+           prefixi={o\bibinitperiod}}}%
+        {{hash=f3289a183c06bc6d6d1fc05b59fad74b}{%
+           family={(NIST)},
+           familyi={(\bibinitperiod},
+           given={Technology},
+           giveni={T\bibinitperiod}}}%
+        {{hash=38c61f521f7ebedb153caca2b64947e0}{%
+           family={Dworkin},
+           familyi={D\bibinitperiod},
+           given={Morris\bibnamedelima J.},
+           giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=3a99042d62def53f3d4c3f6dc026f176}{%
+           family={Turan},
+           familyi={T\bibinitperiod},
+           given={Meltem\bibnamedelima Sonmez},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=c3f65c51c7b6c44728028c1c154b1f1c}{%
+           family={Mouha},
+           familyi={M\bibinitperiod},
+           given={Nicky},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{publisher}{2}{%
+        {Federal Inf. Process. Stds. (NIST FIPS), National Institute of Standards}%
+        {Technology, Gaithersburg, MD}%
+      }
+      \strng{namehash}{133e2a14e051c6c9f27a1abf77492a37}
+      \strng{fullhash}{832344a0f69491df2a053e583b02596a}
+      \strng{fullhashraw}{832344a0f69491df2a053e583b02596a}
+      \strng{bibnamehash}{133e2a14e051c6c9f27a1abf77492a37}
+      \strng{authorbibnamehash}{133e2a14e051c6c9f27a1abf77492a37}
+      \strng{authornamehash}{133e2a14e051c6c9f27a1abf77492a37}
+      \strng{authorfullhash}{832344a0f69491df2a053e583b02596a}
+      \strng{authorfullhashraw}{832344a0f69491df2a053e583b02596a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{2023-05-09 04:05:00}
+      \field{title}{Advanced Encryption Standard (AES)}
+      \field{year}{2023}
+      \verb{doi}
+      \verb https://doi.org/10.6028/NIST.FIPS.197-upd1
+      \endverb
+      \verb{urlraw}
+      \verb https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=936594
+      \endverb
+      \verb{url}
+      \verb https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=936594
+      \endverb
+    \endentry
+    \entry{dewolf2023quantumcomputinglecturenotes}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=4072fcdfa949758d3a860d7e08c1fa54}{%
+           family={Wolf},
+           familyi={W\bibinitperiod},
+           given={Ronald},
+           giveni={R\bibinitperiod},
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+      }
+      \strng{namehash}{4072fcdfa949758d3a860d7e08c1fa54}
+      \strng{fullhash}{4072fcdfa949758d3a860d7e08c1fa54}
+      \strng{fullhashraw}{4072fcdfa949758d3a860d7e08c1fa54}
+      \strng{bibnamehash}{4072fcdfa949758d3a860d7e08c1fa54}
+      \strng{authorbibnamehash}{4072fcdfa949758d3a860d7e08c1fa54}
+      \strng{authornamehash}{4072fcdfa949758d3a860d7e08c1fa54}
+      \strng{authorfullhash}{4072fcdfa949758d3a860d7e08c1fa54}
+      \strng{authorfullhashraw}{4072fcdfa949758d3a860d7e08c1fa54}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{quant-ph}
+      \field{eprinttype}{arXiv}
+      \field{title}{Quantum Computing: Lecture Notes}
+      \field{year}{2023}
+      \verb{eprint}
+      \verb 1907.09415
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/1907.09415
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/1907.09415
+      \endverb
+    \endentry
+    \entry{introQCbook}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=eeb6e4c616e234955427182d77c72986}{%
+           family={Wong},
+           familyi={W\bibinitperiod},
+           given={Thomas\bibnamedelima Giechaung},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Omaha, NE}%
+      }
+      \list{publisher}{1}{%
+        {Rooted Grove}%
+      }
+      \strng{namehash}{eeb6e4c616e234955427182d77c72986}
+      \strng{fullhash}{eeb6e4c616e234955427182d77c72986}
+      \strng{fullhashraw}{eeb6e4c616e234955427182d77c72986}
+      \strng{bibnamehash}{eeb6e4c616e234955427182d77c72986}
+      \strng{authorbibnamehash}{eeb6e4c616e234955427182d77c72986}
+      \strng{authornamehash}{eeb6e4c616e234955427182d77c72986}
+      \strng{authorfullhash}{eeb6e4c616e234955427182d77c72986}
+      \strng{authorfullhashraw}{eeb6e4c616e234955427182d77c72986}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{979-8-9855931-1-2}
+      \field{title}{Introduction to classical and quantum computing}
+      \field{year}{2022}
+    \endentry
+    \entry{jaques2024ches_presentation}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=fd6b7c223a2d6ac13db71a9e0e765925}{%
+           family={Jaques},
+           familyi={J\bibinitperiod},
+           given={Samuel},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{fd6b7c223a2d6ac13db71a9e0e765925}
+      \strng{fullhash}{fd6b7c223a2d6ac13db71a9e0e765925}
+      \strng{fullhashraw}{fd6b7c223a2d6ac13db71a9e0e765925}
+      \strng{bibnamehash}{fd6b7c223a2d6ac13db71a9e0e765925}
+      \strng{authorbibnamehash}{fd6b7c223a2d6ac13db71a9e0e765925}
+      \strng{authornamehash}{fd6b7c223a2d6ac13db71a9e0e765925}
+      \strng{authorfullhash}{fd6b7c223a2d6ac13db71a9e0e765925}
+      \strng{authorfullhashraw}{fd6b7c223a2d6ac13db71a9e0e765925}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Presentation at the 26th International Conference on Cryptographic Hardware and Embedded Systems (CHES 2024)}
+      \field{month}{7}
+      \field{note}{Available online: \url{https://ches.iacr.org/2024/Jaques_CHES_2024.pdf}}
+      \field{title}{Quantum Attacks on AES}
+      \field{year}{2024}
+    \endentry
+    \entry{ownwork}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=c87d7581e3bcbb023beb266ca898e5e9}{%
+           family={Storberg},
+           familyi={S\bibinitperiod},
+           given={Emma},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {University of Oslo}%
+      }
+      \strng{namehash}{c87d7581e3bcbb023beb266ca898e5e9}
+      \strng{fullhash}{c87d7581e3bcbb023beb266ca898e5e9}
+      \strng{fullhashraw}{c87d7581e3bcbb023beb266ca898e5e9}
+      \strng{bibnamehash}{c87d7581e3bcbb023beb266ca898e5e9}
+      \strng{authorbibnamehash}{c87d7581e3bcbb023beb266ca898e5e9}
+      \strng{authornamehash}{c87d7581e3bcbb023beb266ca898e5e9}
+      \strng{authorfullhash}{c87d7581e3bcbb023beb266ca898e5e9}
+      \strng{authorfullhashraw}{c87d7581e3bcbb023beb266ca898e5e9}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Unpublished midterm exam}
+      \field{title}{TEK5550 Mandatory Assignment 1}
+      \field{year}{2025}
+    \endentry
+    \entry{Qiskit2023}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=37100acc6e26e1804d8a5e9015f6ee40}{%
+           family={Qiskit},
+           familyi={Q\bibinitperiod}}}%
+      }
+      \strng{namehash}{37100acc6e26e1804d8a5e9015f6ee40}
+      \strng{fullhash}{37100acc6e26e1804d8a5e9015f6ee40}
+      \strng{fullhashraw}{37100acc6e26e1804d8a5e9015f6ee40}
+      \strng{bibnamehash}{37100acc6e26e1804d8a5e9015f6ee40}
+      \strng{authorbibnamehash}{37100acc6e26e1804d8a5e9015f6ee40}
+      \strng{authornamehash}{37100acc6e26e1804d8a5e9015f6ee40}
+      \strng{authorfullhash}{37100acc6e26e1804d8a5e9015f6ee40}
+      \strng{authorfullhashraw}{37100acc6e26e1804d8a5e9015f6ee40}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{YouTube}
+      \field{month}{11}
+      \field{title}{Grover's Algorithm | Understanding Quantum Information \& Computation - Lesson 08}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://www.youtube.com/watch?v=hnpjC8WQVrQ
+      \endverb
+      \verb{url}
+      \verb https://www.youtube.com/watch?v=hnpjC8WQVrQ
+      \endverb
+    \endentry
+    \entry{quantumgates}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b6aea1a416c89509a7df1cbb69249cb6}{%
+           family={{Wikipedia contributors}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{bibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorbibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authornamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \field{extraname}{1}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://en.wikipedia.org/w/index.php?title=Quantum_logic_gate&oldid=1278673600}}
+      \field{note}{[Online; accessed 4-March-2025]}
+      \field{title}{Quantum logic gate --- {Wikipedia}{,} The Free Encyclopedia}
+      \field{year}{2025}
+    \endentry
+    \entry{superposition}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b6aea1a416c89509a7df1cbb69249cb6}{%
+           family={{Wikipedia contributors}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{bibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorbibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authornamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://en.wikipedia.org/w/index.php?title=Quantum_superposition&oldid=1275226563}}
+      \field{note}{[Online; accessed 4-March-2025]}
+      \field{title}{Quantum superposition --- {Wikipedia}{,} The Free Encyclopedia}
+      \field{year}{2025}
+    \endentry
+    \entry{resourcefficientAES}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=8f4f52c24c3b37f865f9107866cf1eed}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Liao-Liang},
+           giveni={L\bibinithyphendelim L\bibinitperiod}}}%
+        {{hash=fcc586951be60b4912b4fdb0d4feec5d}{%
+           family={Cai},
+           familyi={C\bibinitperiod},
+           given={Bin-Bin},
+           giveni={B\bibinithyphendelim B\bibinitperiod}}}%
+        {{hash=0be48a9daf13fde579d9d51375cfee5b}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Fei},
+           giveni={F\bibinitperiod}}}%
+        {{hash=5f3e00be530bc08967f036714e50987b}{%
+           family={Qin},
+           familyi={Q\bibinitperiod},
+           given={Su-Juan},
+           giveni={S\bibinithyphendelim J\bibinitperiod}}}%
+        {{hash=e8a0885c92dc432bd8070f1861234e76}{%
+           family={Jin},
+           familyi={J\bibinitperiod},
+           given={Zheng-Ping},
+           giveni={Z\bibinithyphendelim P\bibinitperiod}}}%
+        {{hash=53490c5b8dff4301652c19eb84c8592b}{%
+           family={Wen},
+           familyi={W\bibinitperiod},
+           given={Qiao-Yan},
+           giveni={Q\bibinithyphendelim Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{71fcbac43fbaea022d2ec483c39a12db}
+      \strng{fullhash}{c5142f0867ba9c203005944ff0ab18a0}
+      \strng{fullhashraw}{c5142f0867ba9c203005944ff0ab18a0}
+      \strng{bibnamehash}{71fcbac43fbaea022d2ec483c39a12db}
+      \strng{authorbibnamehash}{71fcbac43fbaea022d2ec483c39a12db}
+      \strng{authornamehash}{71fcbac43fbaea022d2ec483c39a12db}
+      \strng{authorfullhash}{c5142f0867ba9c203005944ff0ab18a0}
+      \strng{authorfullhashraw}{c5142f0867ba9c203005944ff0ab18a0}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2296-424X}
+      \field{journaltitle}{Frontiers in Physics}
+      \field{title}{Constructing resource-efficient quantum circuits for AES}
+      \field{volume}{Volume 13 - 2025}
+      \field{year}{2025}
+      \verb{doi}
+      \verb 10.3389/fphy.2025.1582819
+      \endverb
+      \verb{urlraw}
+      \verb https://www.frontiersin.org/journals/physics/articles/10.3389/fphy.2025.1582819
+      \endverb
+      \verb{url}
+      \verb https://www.frontiersin.org/journals/physics/articles/10.3389/fphy.2025.1582819
+      \endverb
+    \endentry
+    \entry{cryptoeprint}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=e51b2feac8da559d0f1d95788a6eaea4}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Qun},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=0b9d4896fca22178c881b5236f351e05}{%
+           family={Preneel},
+           familyi={P\bibinitperiod},
+           given={Bart},
+           giveni={B\bibinitperiod}}}%
+        {{hash=31c53327fd1ea736e1e0863448529e06}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Zheng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=3451c4d07806ead10215d04a9cff436e}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Meiqin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{a1c8cc0c662c8e6de25987f62bf998b5}
+      \strng{fullhash}{5382f7edd9baeebcda503eac65feda3c}
+      \strng{fullhashraw}{5382f7edd9baeebcda503eac65feda3c}
+      \strng{bibnamehash}{a1c8cc0c662c8e6de25987f62bf998b5}
+      \strng{authorbibnamehash}{a1c8cc0c662c8e6de25987f62bf998b5}
+      \strng{authornamehash}{a1c8cc0c662c8e6de25987f62bf998b5}
+      \strng{authorfullhash}{5382f7edd9baeebcda503eac65feda3c}
+      \strng{authorfullhashraw}{5382f7edd9baeebcda503eac65feda3c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Cryptology {ePrint} Archive, Paper 2023/1417}
+      \field{title}{Improved Quantum Circuits for {AES}: Reducing the Depth and the Number of Qubits}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://eprint.iacr.org/2023/1417
+      \endverb
+      \verb{url}
+      \verb https://eprint.iacr.org/2023/1417
+      \endverb
+    \endentry
+    \entry{chen2025quantumcircuitimplementingaes}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=964917897462b1447af49798c50b82a2}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Huinan},
+           giveni={H\bibinitperiod}}}%
+        {{hash=7c35737c50e7c335104a6d3a5dc94e5c}{%
+           family={Cai},
+           familyi={C\bibinitperiod},
+           given={Binbin},
+           giveni={B\bibinitperiod}}}%
+        {{hash=0be48a9daf13fde579d9d51375cfee5b}{%
+           family={Gao},
+           familyi={G\bibinitperiod},
+           given={Fei},
+           giveni={F\bibinitperiod}}}%
+        {{hash=a3eb667d517fdc6fa8ad26129bc7b35e}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Song},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{7ebe844563cb07bcbb530139baf575a9}
+      \strng{fullhash}{98ffd9717bfd09b85378bd29e95f67d9}
+      \strng{fullhashraw}{98ffd9717bfd09b85378bd29e95f67d9}
+      \strng{bibnamehash}{7ebe844563cb07bcbb530139baf575a9}
+      \strng{authorbibnamehash}{7ebe844563cb07bcbb530139baf575a9}
+      \strng{authornamehash}{7ebe844563cb07bcbb530139baf575a9}
+      \strng{authorfullhash}{98ffd9717bfd09b85378bd29e95f67d9}
+      \strng{authorfullhashraw}{98ffd9717bfd09b85378bd29e95f67d9}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{quant-ph}
+      \field{eprinttype}{arXiv}
+      \field{title}{Quantum circuit for implementing AES S-box with low costs}
+      \field{year}{2025}
+      \verb{eprint}
+      \verb 2503.06097
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2503.06097
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2503.06097
+      \endverb
+    \endentry
+    \entry{eastinknillwiki}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b6aea1a416c89509a7df1cbb69249cb6}{%
+           family={{Wikipedia contributors}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{bibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorbibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authornamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \field{extraname}{3}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://en.wikipedia.org/w/index.php?title=Eastin%E2%80%93Knill_theorem&oldid=1314440925}}
+      \field{note}{[Online; accessed 26-January-2026]}
+      \field{title}{Eastin–Knill theorem --- {Wikipedia}{,} The Free Encyclopedia}
+      \field{year}{2025}
+    \endentry
+    \entry{synthetiq2025}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=cbb6af23e9cd0402b7a349ac96d9e4ab}{%
+           family={eth-sri},
+           familyi={e\bibinithyphendelim s\bibinitperiod}}}%
+      }
+      \strng{namehash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
+      \strng{fullhash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
+      \strng{fullhashraw}{cbb6af23e9cd0402b7a349ac96d9e4ab}
+      \strng{bibnamehash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
+      \strng{authorbibnamehash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
+      \strng{authornamehash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
+      \strng{authorfullhash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
+      \strng{authorfullhashraw}{cbb6af23e9cd0402b7a349ac96d9e4ab}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Code base, GitHub repository}
+      \field{title}{Synthetiq: Fast and Versatile Quantum Circuit Synthesis}
+      \field{year}{2025}
+      \verb{urlraw}
+      \verb https://github.com/eth-sri/synthetiq
+      \endverb
+      \verb{url}
+      \verb https://github.com/eth-sri/synthetiq
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
