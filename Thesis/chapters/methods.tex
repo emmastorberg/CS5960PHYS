@@ -1,4 +1,12 @@
 \chapter{Methods}\label{chap:methods}
+I have more or less recreated the results from \textcite{sommerstudentNSM}, where they compare the storage capabilities of the surface code and BB code for similar numbers of qubits over time. 
+
+Since, as we have seen, applying the $T$-gate does not in any way reduce to stabilizer operations, software such as PanQEC is not able to help us reduce this cost. 
+
+\textcolor{blue}{Here I could segue into how we need to use the standard matrix form which grows exponentially, but it feels kind of pointless. I have not really made the argument that it is impossible to do this a smarter way than I am doing it.}
+
+\textcolor{blue}{Potential plan: Do this the hard way with the 16 qubit BB code and the 17 qubit surface code. Go through and make the circuits or at least the individual gates with this lifted unitary matrix approach and compare them.}
+
 \todo[inline]{Unfinished section, not looking for supervisor feedback here yet.}
 The goal of this project is to simulate the circuitry of Grover's algorithm with two logical qubits, comparing how the circuit looks, the qubit requirements and overall complexity for a few different types of error correcting codes. Recall the expression for the unitary matrix defining an arbitrary quantum circuit:
 \[U \in \mathbb{C}^{2^n \times 2^n}.\]
