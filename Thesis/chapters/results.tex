@@ -1,5 +1,25 @@
-\chapter{Results}
-\todo[inline]{Plan: Compare application of specific gates we need in different error correction architecture (surface code, BB code, possibly 5-qubit code as well?).
-See if I can get a full or partial circuit running. Describe what the circuit might look like, even if I end up not being able to run it.}
+\chapter{Assessing the Quantum Threat}
+\todo[inline]{What does everything we've done so far tell us about Jaques' conclusion?}
 
-\supervisorsinline{Should I have a separate discussion section?}
+\section{T-gate Cost as a Bottleneck}
+How T-gate count in the Grover circuit translates to physical resource requirements
+
+Comparison across codes: surface code vs. BB code overhead per logical T-gate
+
+Even with BB code's improved qubit ratio, does the T-gate problem go away?
+
+\section{Improvements with a Better Error Correcting Code}
+Revisiting Jaques' estimates under BB code assumptions
+
+Where BB code helps (qubit overhead, threshold) and where it doesn't (T-gate implementation still hard)
+
+Provided we need CCZ factories, we still need these in the BB codes. The main differences lie in other aspects. So it's good and bad news in a way, improving CCZ codes will create improvements everywhere, but it doesn't automatically make BB codes better.
+
+Diagrams of logical operator circuits across codes go here
+
+\section{Grover's Algorithm as a Practical Threat}
+What would need to change for Grover's to be viable? 
+
+Summarize the remaining gaps: T-gate implementation in BB code, circuit depth, parallelization??
+
+Frame this constructively as directions for future work rather than just "it's still hard"

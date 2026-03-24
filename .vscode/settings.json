@@ -1,0 +1,3 @@
+{"latex-workshop.texcount.autorun": "onSave",
+"latex-workshop.texcount.args": ["-merge", "-sum", "-total"]
+}

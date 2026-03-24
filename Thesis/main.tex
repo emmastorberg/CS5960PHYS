@@ -1,29 +1,56 @@
-\documentclass[11pt,a4paper]{report}
+\documentclass[USenglish]{uiomasterthesis}
 
-% Preamble files
+\usepackage[T1]{url}
+\urlstyle{sf}
+\usepackage{babel, csquotes, graphicx, textcomp, uiomasterfp, varioref}
+\usepackage[sorting=none,backend=biber,style=numeric,doi=true,url=true]{biblatex}
+\usepackage[hidelinks, hypertexnames=false]{hyperref}
+
+% Project-specific packages and macros.
 \input{preamble/packages}
 \input{preamble/macros}
 
 \title{Master's Thesis}
+\subtitle{Grover's Algorithm and Quantum Error Correction}
 \author{Emma Storberg}
-\date{\today}
+
+\addbibresource{refs.bib}
 
 \begin{document}
+\uiomasterfp[
+	dept={Department of Physics},
+	program={Computational Science: Physics},
+	supervisor={TBD},
+	long
+]
 
-\pagenumbering{roman}
-\maketitle
-\tableofcontents
-\clearpage
+\frontmatter{}
+\begin{abstract}
+This thesis studies realistic resource requirements for applying Grover's algorithm to symmetric cryptanalysis under fault-tolerant assumptions.
+The work investigates how error-correcting architectures impact feasibility, with emphasis on quantum memory and logical operations.
+Implementations and simulations are developed for small code families, including the 5-qubit and 7-qubit codes, and exploratory analysis is performed for LDPC-style constructions such as surface and BB codes.
+The results provide practical insight into which design assumptions dominate runtime and overhead in near-term-to-fault-tolerant pathways.
+\end{abstract}
 
-\pagenumbering{arabic}
+\tableofcontents{}
+\listoffigures{}
+\listoftables{}
 
-% Chapters
+\mainmatter{}
+\part{Introduction}
 \include{chapters/intro}
+\part{Background}
 \include{chapters/background}
+\part{Experiments and Analysis}
 \include{chapters/methods}
 \include{chapters/results}
+\part{Conclusion}
 \include{chapters/conclusion}
+\part{Appendices}
+\appendix
+\crefalias{chapter}{appendix}
+\include{chapters/smaller_code_definitions}
 
-\printbibliography
-
+\backmatter{}
+\printbibliography{}
 \end{document}

@@ -6,7 +6,7 @@ from gates import pauli_x_gate, pauli_y_gate, pauli_z_gate, identity_gate, hadam
 
 # source: https://www.physics.unlv.edu/~bernard/MATH_book/Chap9/Notebook9_3.pdf
 
-"""Might not errors occurring throughout the error correction, as long as the circuit is actually able to correct errors!"""
+"""Might not put errors occurring throughout the error correction, as long as the circuit is actually able to correct errors!"""
 
 tol = 1e-12
 p_error = 0.01

@@ -1,41 +1,187 @@
-\chapter{Methods}\label{chap:methods}
-I have more or less recreated the results from \textcite{sommerstudentNSM}, where they compare the storage capabilities of the surface code and BB code for similar numbers of qubits over time. 
+%\chapter{Methods}\label{chap:methods}
 
-Since, as we have seen, applying the $T$-gate does not in any way reduce to stabilizer operations, software such as PanQEC is not able to help us reduce this cost. 
+\sectionoutline{i'm thinking of a methods/analysis/results structure like this:
+details on the scaling issues with simulating quantum systems, how they explode unless we find some smart solutions (hint hint stabilizer formalism)
 
-\textcolor{blue}{Here I could segue into how we need to use the standard matrix form which grows exponentially, but it feels kind of pointless. I have not really made the argument that it is impossible to do this a smarter way than I am doing it.}
+this motivates beginning by a proof of concept experiment with the smallest codes, where i touch upon the 5 and 7 qubit codes and their properties (maybe i don't really introduce them in the theory section at all, leave their formal descriptions as an appendix?). i explain these experiments however far they get with memory limitations etc
 
-\textcolor{blue}{Potential plan: Do this the hard way with the 16 qubit BB code and the 17 qubit surface code. Go through and make the circuits or at least the individual gates with this lifted unitary matrix approach and compare them.}
+moving on to why the stabilizer formalism is a helpful tool that lets us do more classically because we can store a state essentially “in terms of its stabilizers” (right?)
 
-\todo[inline]{Unfinished section, not looking for supervisor feedback here yet.}
-The goal of this project is to simulate the circuitry of Grover's algorithm with two logical qubits, comparing how the circuit looks, the qubit requirements and overall complexity for a few different types of error correcting codes. Recall the expression for the unitary matrix defining an arbitrary quantum circuit:
+introducing the software package panQEC and some details on how it works internally that support this “easy to compute with stabilizers” argument
+
+then we show the quantum memory simualtion results with the BB code and surface code.
+now we get into the part i havent really done but i think should be possible: i know panQEC can identify X and Z logicals so it would be interesting to run the simulations again with those applied perhaps, maybe even a hadamard? 
+
+then we make a similar plot of the logical operators over time
+
+then we move on to T gates in earnest and CCZ factories and how this is outside the scope of the stabilizer formalism so panQEC probably can't really help us, and then i can show some attempts to code this up on individual logical qubits (not in the grover circuit)}
+
+\aicomment{Claude's thoughts:
+The flow is good — it has a natural narrative logic where each section motivates the next. The stabilizer formalism section in particular is a nice pivot point that earns its place structurally rather than feeling like background dumped in the middle.
+
+On your specific question about stabilizer representation: yes, your intuition is correct. Instead of storing a full $2^n$-dimensional state vector, you store the n stabilizer generators as Pauli strings, which scales polynomially. The catch, as you know, is that this only works as long as you stay within the Clifford group — T-gates kick you out of that efficient representation, which is exactly the wall you hit with PanQEC. That's a clean story.
+On the method/analysis/results distinction
+
+Honestly, I'd stop trying to force these into separate chapters and instead think of it as one unified chapter with a clear internal logic. Here's why: in your structure, the "result" of each experiment is also the "motivation" for the next step. Separating them would actually break the flow you've built. What you could do instead is label sections clearly within a single chapter so the reader always knows what mode they're in:
+
+Sections describing what you did and how = method
+
+Sections showing plots and outcomes = results
+
+Sections interpreting what it means for Jaques' argument = analysis
+
+These can alternate naturally within one chapter rather than being segregated. Many theses in theoretical/computational physics work this way.
+
+On the structure itself, a few concrete thoughts:
+
+The scaling issues section works well as an opener because it frames everything that follows as a response to a constraint. Just make sure it ends with a clear statement of what the stabilizer formalism buys you — that sentence is the hinge the whole chapter turns on.
+The 5 and 7-qubit codes as proof-of-concept is fine, and putting their formal definitions in an appendix is a sensible call. In the main text you really only need to say: "smallest code correcting all errors, used as a starting point, hit this wall" and "smallest code with transversal Cliffords, used to attempt computation, got this far." The appendix handles anyone who wants the math.
+
+The PanQEC section is where I'd be careful. Explaining how it works internally is only worth including if it directly supports your stabilizer efficiency argument — which it sounds like it does if the code represents states in binary symplectic form. Keep that section tightly focused on "here's why this tool works well for Clifford operations and here's exactly where it stops working," rather than being a general software description.
+
+The X, Z, and Hadamard logical operator simulations sound very doable and would make a genuine contribution — even a plot showing logical error rates with and without active logical operations applied would be something concrete. The key question is whether PanQEC's logical operator identification gives you operators you can actually apply to the encoded state, or just identifies what they are. Do you know which it is?
+
+The T-gate section at the end is where your thesis argument lands, so it needs to be the most carefully written part even if the implementation is the least complete. I'd structure it as: here is what we would need to do (CCZ factory, magic state distillation), here is why the stabilizer framework can't help us simulate it efficiently, here is what a minimal attempt looks like and where it breaks down, and here is what this tells us about Jaques' conclusion. Even a failed or partial implementation described honestly is a result if you interpret it correctly.
+
+One thing missing from your outline:
+
+There's no moment where you explicitly connect your simulation findings back to the Jaques argument quantitatively — even roughly. Something like: "the surface code requires X physical qubits per logical qubit at our error rate; the BB code requires Y; applied to Jaques' estimate of Z logical qubits for AES-128, this means..." Even a back-of-envelope version of that calculation would give the analysis chapter a payoff that it currently lacks. You have all the ingredients to do it.
+}
+
+\chapter{General Limitations when Simulating Quantum Systems}\label{chap:simulation_limitations}
+In order to design and develop the technology necessary to begin implementing new error correcting architectures, it is typically helpful to simulate how the components might work. In particular, the goal of this project is to simulate how a physical qubit setup might look for a working version of Grover's algorithm, a steppingstone on the way to fault-tolerant physical implementation. However, simulating the full fault-tolerant system with an error correcting code of our choice turns out to be nearly impossible, even for the smallest nontrivial case of Grover's algorithm with only two input qubits.
+
+To understand why this is so problematic, recall the expression for the unitary matrix defining an arbitrary quantum circuit with $n$ input qubits:
 \[U \in \mathbb{C}^{2^n \times 2^n}.\]
-Given a gate set, we obtain $U$ by ``lifting'' the individual gate matrices to the appropriate dimension $2^n \times 2^n$ and multiplying them in the right order. 
+Given a gate set, we obtain $U$ by \emph{lifting} the individual gate matrices to the appropriate dimension $2^n \times 2^n$ and multiplying them in the right order. Specifically, in a quantum circuit, lifting a single-qubit gate $G \in \mathbb{C}^{2 \times 2}$ acting on qubit $k$ of an $n$-qubit system means constructing the corresponding $2^n \times 2^n$ unitary
+\[
+\tilde{G} = \mathbb{I}_2 \otimes \cdots \otimes G \otimes \cdots \otimes \mathbb{I}_2,
+\]
+where $G$ appears in the $k$-th tensor factor. This approach preserves the mathematical structure of the full state at all times when applying a gate to only a few of the qubits, but it comes at a cost. The exponential scaling when $n$ grows as we add qubits to the system means that we quickly face extremely large matrices when simulating anything beyond minimal examples or the logical abstractions of algorithms. This is bad news for us, because it means that when we add error correction architectures belonging to the families of primary interest, we will not be able to simulate the circuit.
 
-Noise is not a single perturbation at the end of our circuit, and other aspects like timing, decoherence and idle errors are completely lost\todo{Rewrite this sentence; doesn't make sense as is.}. Addressing all of these things\todo{change word} is very complex and not fully understood, but we still wish to use a different approach that takes into account some of them somehow... INTRODUCE TICK MODEL AND SEQUENTIAL APPLICATiON OF GATES!!
+For instance, the smallest possible surface code is displayed in \cref{fig:smallest_surface_code}. It requires at least ten qubits, provided we reuse a single ancillary qubit for measurement rather than using eight individual ones. Each gate we would need in a simulation of Grover's with two logical qubits would be a $2^{20} \times 2^{20}$ matrix to account for the no fewer than 20 qubits in the system. 
 
-\subsection{Error Models}
-Currently, the error model used is a time-step system, similar to video game logic that progresses with ticks to simulate time passing. Errors are modeled stochastically, with a fixed probability $p=0.01$ of occurring on any given qubit at any time step. Further improvements to this error model are discussed in \cref{sec:future_work}.
+\todo[inline]{Add technical explanation/justification of memory requirements.}
 
-\subsection{Software Aids}
-The software package PanQEC \cite{panqec2021} was used to visualize a few different kinds of error correcting codes. It also has functionality for determining logical operators of various types, which correct errors and perform small single-qubit computations. 
+This also assumes none of the gates necessitate additional ancilla qubits to further drive up this cost, which, as we will see in \cref{chap:t_gate} when we delve into the implementation of the $T$-gate, is not the case if we want a universal gate set.
 
-As previously discussed, the challenge of doing operations on our fault-tolerantly stored data is multi-faceted. We need to figure out hwo to use gates to perform the computations we want, and then we need to realize those gates in the physical machinery. Fortunately for us, circuits for Grover's algorithm already exist and have even been implemented physically in Noisy Intermeidate-Scale Quantum (NISQ) computing setups (as opposed to fault-tolerant). There is no error correction taking place in the NISQ approach, but we still have a circuit that performs the operation we want.
-
-Synthetiq is another tool, which allows you to take any circuit and express it in terms of another limited gateset, such as Clifford+T (although it does support custom gatesets). HOWEVER; this does not take into account the fault-tolerant aspect of what we're doing, so we need a way to find a fault-tolerant circuit and simulate it.
-
-
-I am working with Panqec, which is a visualization tool developed by Arthur Pesak. IDeally, the method would be to use Panqec to visualize a couple different types of code, and then figure out ways to do logical operations on whatever I stabilize there.
-
-\section{Coding Fault-tolerant Quantum Memory}
-\subsection{Surface Code}
-The smallest possible surface code requires 17 qubits (or possibly 10, if you reuse one ancillary qubit for measurement rather than having 8 individual ones).
 \begin{figure}[h!]
     \centering
     \includegraphics[scale=0.3]{figures/The-smallest-possible-surface-code-consisting-of-9-data-qubits-The-indicated-8.png}
+    \caption{The smallest possible surface code consisting of nine data qubits. The indicated eight stabilizers could, in principle, be measured sequentially by a single additional qubit, or measured in parallel by an additional eight qubits. \textcolor{red}{Add source to bibliography.}}\label{fig:smallest_surface_code}
 \end{figure}
 
-\subsection{BB Code}
+\section{Proof-of-concept Experiments with Smaller Codes}
+No published fault-tolerant physical implementation of Grover's algorithm exists at any scale, making it worthwhile to explore in detail how that might look\supervisors{I can't find anything but it's scary to declare this. How should I phrase it?}. Aware of the limitations that come with simulating a large quantum system classically, two smaller error correcting codes, the \emph{5-qubit code} and the \emph{7-qubit Steane code}, were selected and implemented in code. These codes are defined and described in more detail in \cref{app:smaller_codes}.
+
+The 5-qubit code was a natural place to begin when searching for finding ways to simulate Grover's algorithm classically, since it is the smallest quantum error correcting code that can correct any type of error \cite{Nielsen_Chuang_2010}. The code was implemented by explicitly constructing the encoding circuit and logical operators as $2^5 \times 2^5$ unitaries\todo{more detail or pseudocode? results?}. While the quantum memory aspect worked as intended, it turns out that the 5-qubit code is not a good candidate for computation because in it, the Clifford gates are not transversal. This naturally led to considering the 7-qubit Steane code instead, another relatively small error correcting code where the Clifford gates do possess transversality, simplifying the implementation of certain logical operators. For this reason, the 7-qubit Steane code is a common choice in quantum error correction research settings today.
+
+\subsection{Simulating Toy Version of Grover's Algorithm}
+The circuit design for Grover's algorithm without any form for error correction is well-known and is illustrated in \cref{sec:grovers}.
+\todo[inline]{How was it implemented? Add a diagram and maybe some pseudocode.}
+
+\chapter{Utilizing Stabilizer Formalism as a Computational Tool}
+The exponential scaling of full unitary simulation, as described in \cref{chap:simulation_limitations}, presents a fundamental barrier to classical simulation of large quantum circuits. In certain codes, however, we can at least partially circumvent the issue: For an $n$-qubit system, rather than storing and manipulating the full $2^n \times 2^n$ unitary, or even the state vector of $2^n$ complex amplitudes, a stabilizer state can be represented compactly by a set of $n$ independent commuting Pauli operators $\{g_1, \ldots, g_n\}$ called \emph{generators}. This uniquely specifies a state $\ket{\psi}$, which is the one joint $+1$ eigenstate of all $g_i$ simultaneously. Thus, to recover the state vector from the generators, one simply asks which state satisfies $g_i\ket{\psi} = +\ket{\psi}$ for all $i$. To further illustrate how the stabilizer representation lets us recover the corresponding state vector uniquely, we will step through a small example.
+
+\begin{center}
+    \begin{tikzpicture}
+    \node [mybox] (box){%
+        \begin{minipage}{0.85\textwidth}
+            Consider the 3-qubit bit-flip code, with stabilizers $g_1 = ZZI$ and $g_2 = IZZ$, and logical operators $\bar{X} = XXX$, $\bar{Z} = ZZZ$. The generators alone define the codespace, spanned by $\ket{\bar{0}} = \ket{000}$ and $\ket{\bar{1}} = \ket{111}$, but do not yet specify which logical state we are in. To pin down a specific state, we augment the generator list with a logical operator. If we add $\bar{Z} = ZZZ$ as a third stabilizer, the unique joint $+1$ eigenstate of all three is $\ket{000} = \ket{\bar{0}}$, since we see that $ZZZ\ket{111} = -\ket{111}$, ruling out $\ket{111} = \ket{\bar{1}}$ as it is not a +1 eigenstate of the set. If we add $\bar{X} = XXX$ instead, the unique joint $+1$ eigenstate becomes $\frac{1}{\sqrt{2}}(\ket{000} + \ket{111}) = \ket{\bar{+}}$. In each case, the full state vector is recoverable from the generator list alone, with no ambiguity.
+        \end{minipage}
+    };
+    \node[fancytitle, right=10pt] at (box.north west) {Example: Recovering a state vector from the stabilizer representation};
+    \end{tikzpicture}%
+\end{center}
+
+The storage advantage is now clear: Each generator $g_i$ is a tensor product of $n$ single-qubit Paulis, requiring only $\mathcal{O}(n)$ bits to store, so the full generator list needs only $\mathcal{O}(n^2)$ bits\todo{Have I previously made an argument for how many stabilizers are required for a given stabilizer code? If not I should do so or expand on this here.}, compared to $\mathcal{O}(2^n)$ complex numbers for the state vector. 
+
+We also have computational shortcuts when working with Clifford gates, which we recall are the gates that map Pauli matrices to Pauli matrices. If we have a stabilizer state $\ket{\psi}$ with generators $\{g_1, \ldots, g_n\}$, we can apply a Clifford gate $C$ to obtain a new state $C\ket{\psi}$. Rather than computing the full matrix product $C\ket{\psi}$ in a $2^n$-dimensional space, we can take advantage of the stabilizer formalism and the fact that the generators uniquely determine the state to calculate the effect of $C$ based on what happens to the generators. We want a new set of operators $g_i'$ such that $g_i'(C\ket{\psi}) = C\ket{\psi}$. The following map achieves this:
+\[
+    g_i \;\mapsto\; Cg_iC^\dagger.
+\]
+We can verify that generators $g_i' = Cg_iC^\dagger$ defined in this way do indeed stabilize our updated state $C\ket{\psi}$, since it holds that:
+\[g_i'C\ket{\psi} = Cg_iC^\dagger \cdot C\ket{\psi} = Cg_i\ket{\psi} = C\ket{\psi}.\]
+This stabilizer update rule holds for any unitary matrix, but working with Clifford gates unlocks the advantage of ensuring $Cg_iC^\dagger$ is always another valid Pauli string, preserving the compact $\mathcal{O}(n)$-bit-per-generator storage throughout the entire computation. If conjugation by $C$ could produce arbitrary matrices, we would be back to storing exponentially large objects and the efficiency gain would be lost.
+
+To see the mechanics of the update rule, consider applying $H$ to $\ket{0}$, stabilized by $g = Z$. We can simply update the stabilizer $HZH^\dagger = X$ and read off that the new state is stabilized by $X$, meaning it is the state $\ket{+}$. No matrix multiplication of a state vector is needed; the state update is captured in its entirety by relabeling one Pauli letter. In general, since a Clifford gate touches at most two qubits at a time\todo{Have I mentioned this before?}, updating one generator costs $\mathcal{O}(n)$, relabeling at most two Pauli letters according to a fixed lookup table. Updating all $n$ generators therefore costs $\mathcal{O}(n^2)$ in total, compared to the $\mathcal{O}(2^n)$ cost of full state vector simulation. This is the main result of the Gottesman-Knill theorem \cite{gottesman1998heisenbergrepresentationquantumcomputers}: Any circuit composed entirely of Clifford gates can be simulated efficiently on a classical computer in the stabilizer representation.
+
+\section{Software Aids}
+The software package \texttt{PanQEC} \cite{panqec2021} was used to visualize the geometry of several error correcting codes and to extract their logical operators. It stores stabilizer codes internally in \emph{binary symplectic format}, in which each Pauli operator on $n$ qubits is represented as a binary vector $v = (v_X \mid v_Z) \in \mathbb{F}_2^{2n}$. Here, the first $n$ bits indicate which qubits carry an $X$ factor and the last $n$ bits indicate which carry a $Z$ factor. A full stabilizer group with $m$ generators is then stored as an $m \times 2n$ binary matrix, replacing what would otherwise require tracking $m$ dense $2^n \times 2^n$ matrices. This yields a significant reduction in memory overhead and makes operations such as checking commutativity straightforward via the symplectic inner product.
+
+\todo[inline]{Add explanation of logical operator application in PanQEC.}
+\textcolor{orange}{It also has functionality for determining logical operators of various types, which correct errors and perform small single-qubit computations.}
+
+\section{Simulating Stable Quantum Memory with PanQEC}
+\todo[inline]{How are different codes specified? The basics of the software skeleton.}
+A natural place to begin is finding ways to store quantum data as quantum memory.
+
+Surface code is the most common architecture today. I typically hear we will need 1000 physical qubits per logical qubit with the surface code\todo{source? and write more formally}, which is much larger than we simulate.
+
+% The smallest possible surface code requires 17 qubits (or possibly 10, if you reuse one ancillary qubit for measurement rather than having 8 individual ones).
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[scale=0.3]{figures/The-smallest-possible-surface-code-consisting-of-9-data-qubits-The-indicated-8.png}
+% \end{figure}
+
 \textcite{liang2026selfdualbivariatebicyclecodes} have found all BB codes using less than 160 qubits. The smallest of these, the $[[16, 4, 4]]$-code, is the only option I have considered because otherwise I run into major memory issues.
 
-\section{Applying Gates to Error-correcting Patches}
+\todo[inline]{\textcite{sommerstudentNSM} did a comparison of surface code and BB code as part of a project for NSM, and I essentially recreated that simulation. Write about it and put it into the two next sections.}
+
+\subsection{Results}
+
+\todo[inline]{Explain implementation of quantum memory with figures from PanQEC.}
+
+Quantum data storage is one of the key ways BB codes offer an improvement over surface codes.
+
+
+\section{Simulating Transversal Logical Operators with PanQEC}
+The stabilizer formalism can help us make this more efficient for certain gates because we work only with the stabilizers to represent a state. The trouble is when we tackle the T gate, which is incompatible with our stabilizer space and we have to resort to this clunky notation again with the full matrix. This means that the inlcusion of the T gate prevents an efficient classical simulation.
+
+\todo[inline]{Explain what we already know about how to do this in real life and how certain logical operators are applied with PanQEC}
+
+\subsection{Results}
+\todo[inline]{Do these experiments if possible, recreate summer student plots but with logical operators applied.}
+
+
+\chapter{The Trouble with the T-gate}\label{chap:t_gate}
+\todo[inline]{Why can't the stabilizer framework help us simulate it efficiently?}
+Note that this efficiency breaks down the moment a non-Clifford gate such as the $T$-gate is introduced. In this instance, a Pauli can then map to a non-Pauli under conjugation, the representation is no longer valid, and one must fall back to full state vector simulation.
+
+As we have seen, applying the $T$-gate does not in any way reduce to stabilizer operations, it is not immediately obvious how to go from the PanQEC architecture to a working circuit.
+
+\section{Implemention}
+\todo[inline]{What would we need to do to implement t-gates? (CCZ factory, magic state distillation)}
+
+\todo[inline]{Here is what a minimal attempt looks like and where it breaks down}
+\todo[inline]{Try to code this up on individual error corrected qubits, not in a full circuit.}
+
+
+% \textcolor{blue}{Potential plan: Do this the hard way with the 16 qubit BB code and the 17 qubit surface code. Go through and make the circuits or at least the individual gates with this lifted unitary matrix approach and compare them.}
+
+% \textcolor{blue}{Here I could segue into how we need to use the standard matrix form which grows exponentially, but it feels kind of pointless. I have not really made the argument that it is impossible to do this a smarter way than I am doing it.}
+
+%The goal of this project is to simulate the circuitry of Grover's algorithm with two logical qubits, comparing how the circuit looks, the qubit requirements and overall complexity for a few different types of error correcting codes. 
+
+
+% Noise is not a single perturbation at the end of our circuit, and other aspects like timing, decoherence and idle errors are completely lost\todo{Rewrite this sentence; doesn't make sense as is.}. Addressing all of these things\todo{change word} is very complex and not fully understood, but we still wish to use a different approach that takes into account some of them somehow... INTRODUCE TICK MODEL AND SEQUENTIAL APPLICATiON OF GATES!!
+
+% \subsection{Error Models}
+% Currently, the error model used is a time-step system, similar to video game logic that progresses with ticks to simulate time passing. Errors are modeled stochastically, with a fixed probability $p=0.01$ of occurring on any given qubit at any time step. Further improvements to this error model are discussed in \cref{sec:future_work}.
+
+% As previously discussed, the challenge of doing operations on our fault-tolerantly stored data is multi-faceted. We need to figure out how to use gates to perform the computations we want, and then we need to realize those gates in the physical machinery. Fortunately for us, circuits for Grover's algorithm already exist and have even been implemented physically in Noisy Intermeidate-Scale Quantum (NISQ) computing setups (as opposed to fault-tolerant). There is no error correction taking place in the NISQ approach, but we still have a circuit that performs the operation we want.
+
+% Synthetiq is another tool, which allows you to take any circuit and express it in terms of another limited gateset, such as Clifford+T (although it does support custom gatesets). HOWEVER; this does not take into account the fault-tolerant aspect of what we're doing, so we need a way to find a fault-tolerant circuit and simulate it.
+
+% \section{Fault-tolerant Quantum Memory with PanQEC}
+% \subsection{Surface Code}
+% The smallest possible surface code requires 17 qubits (or possibly 10, if you reuse one ancillary qubit for measurement rather than having 8 individual ones).
+% \begin{figure}[h!]
+%     \centering
+%     \includegraphics[scale=0.3]{figures/The-smallest-possible-surface-code-consisting-of-9-data-qubits-The-indicated-8.png}
+% \end{figure}
+
+% \subsection{BB Code}
+% \textcite{liang2026selfdualbivariatebicyclecodes} have found all BB codes using less than 160 qubits. The smallest of these, the $[[16, 4, 4]]$-code, is the only option I have considered because otherwise I run into major memory issues.
+
+% \section{Applying Gates to Error-correcting Patches}

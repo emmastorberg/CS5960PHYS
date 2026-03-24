@@ -1,10 +1,4 @@
-% fonts and encoding
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-
 % page layout
-\usepackage[a4paper,margin=2.5cm]{geometry}
 \usepackage{microtype}
 \setlength{\parindent}{0pt} % no paragraph indentation
 \setlength{\parskip}{0.8\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip} % space between paragraphs
@@ -12,6 +6,7 @@
 \onehalfspacing
 
 % math
+\usepackage{calc}
 \usepackage{amsmath,amssymb,mathtools}
 \usepackage{siunitx}
 \sisetup{separate-uncertainty=true}
@@ -20,23 +15,14 @@
 \usetikzlibrary{quantikz2,shapes,snakes}
 
 % figures and tables
-\usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{subcaption}
 
 % references and links
-\usepackage[hidelinks]{hyperref}
 \usepackage[nameinlink,capitalise]{cleveref}
-
-% language and quotes
-\usepackage[english]{babel}
-\usepackage{csquotes}
 
 %tools
 \usepackage{todonotes}
 \usepackage{comment}
 
-% bibliography
-\usepackage[sorting=none,backend=biber,style=numeric,doi=true,url=true]{biblatex}
-\addbibresource{refs.bib} % adjust path if needed
