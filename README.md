@@ -13,9 +13,10 @@ CS5960PHYS/
 │   ├── smaller_codes/              # Proof-of-concept experiments with the 5- and 7-qubit codes
 │   └── t-gate_implementation/      # Implementation of T-gate
 ├── thesis/                         # Thesis manuscript sources (LaTeX)
+├── README.md                       # Project overview, setup, and usage instructions
 ├── main.py                         # Runs simulations, generates all plots and diagrams
-└── README.md                       # Project overview, setup, and usage instructions
-├── pyproject.toml                  # uv environment specification
+└── pyproject.toml                  # uv environment specification
+
 ```
 
 ## How to run code
