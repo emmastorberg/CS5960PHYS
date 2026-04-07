@@ -1,3 +1,0 @@
-panqec
-bposd
-scipy

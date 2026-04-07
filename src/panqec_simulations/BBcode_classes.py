@@ -437,8 +437,8 @@ if __name__ == '__main__':
 
     # Visualize the code in the GUI
 
-    from decoder_classes import BeliefPropagationLSDDecoder
-    from errormodel_classes import GaussianPauliErrorModel
+    from panqec_simulations.decoder_classes import BeliefPropagationLSDDecoder
+    from panqec_simulations.errormodel_classes import GaussianPauliErrorModel
 
     gui = GUI()
     gui.add_code(BBcode_Toric, 'BBcode Toric')

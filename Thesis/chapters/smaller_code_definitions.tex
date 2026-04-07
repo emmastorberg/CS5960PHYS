@@ -1,8 +1,37 @@
 \chapter{Definitions of Smaller Error Correcting Codes Used}\label{app:smaller_codes}
 In addition to the aforementioned architectures that are viable options in the landscape of quantum technology today, this project also necessitated some smaller quantum codes to allow for easier simulation of circuitry.
 
-\subsubsection{The 5-qubit Code}
-\todo[inline]{Explain the 5-qubit code here with relevant mathematical background.}
+\section{The 5-Qubit Code}
+The 5-qubit code \cite{Nielsen_Chuang_2010} is the smallest quantum error correcting code capable of correcting an arbitrary single-qubit error. Its parameters are $[[5,1,3]]$, meaning five physical qubits are used to encode a single logical qubit, with a code distance of three, allowing it to detect and correct any single-qubit error.
 
-\subsubsection{The 7-qubit Steane Code}
-\todo[inline]{Explain the 7-qubit code here with relevant mathematical background.}
+That five qubits is the minimum required for this purpose is not immediately obvious, but follows from a counting argument. Correcting an arbitrary single-qubit error on nn
+n qubits requires distinguishing between $3n+1$ error syndromes (the three error types $X$, $Y$ and $Z$ on each of the $n$ qubits, plus the no-error case)\todo{source}. With $n - k$ stabilizer generators\todo{source}, the syndrome space has $2^{n-k}$ elements. For $k = 1$ logical qubit, we therefore require $2^{n-1} \geq 3n + 1$, which is first satisfied at $n = 5$.
+
+The four stabilizer generators of the 5-qubit code are:
+\begin{align*}
+g_1 &= X Z Z X \mathbb{I} \\
+g_2 &= \mathbb{I} X Z Z X \\
+g_3 &= X \mathbb{I} X Z Z \\
+g_4 &= Z X \mathbb{I} X Z
+\end{align*}
+These generators, together with their products, define the codespace. The logical operators are $\bar{X} = XXXXX$ and $\bar{Z} = ZZZZZ$.
+
+While the 5-qubit code is attractive for its minimality, it has a significant practical limitation: The Clifford gates are not transversal in this code. This means that implementing even computationally simple logical operations requires coupling physical qubits within the code block, removing the fault-tolerance guarantees that transversality would otherwise provide. For this reason, the 5-qubit code is well-suited as a proof-of-concept for quantum memory, but not as a platform for fault-tolerant computation, which motivated the move to the 7-qubit Steane code when performing experiments.
+
+\section{The 7-Qubit Steane Code}
+The 7-qubit Steane code \cite{Steane1996, eczoo_steane} is a $[[7, 1, 3]]$ code, encoding one logical qubit in seven physical qubits with code distance three, and is one of the most well-studied codes in quantum error correction. Like the surface code and the BB codes introduced in \cref{chap:QEC}, it belongs to the \emph{Calderbank-Shor-Steane} (CSS) family\todo{source}, meaning its stabilizer generators separate cleanly into an $X$-type set and a $Z$-type set.
+
+The six stabilizer generators are:
+\begin{align*}
+g_1 &= \mathbb{I}\mathbb{I}\mathbb{I} X X X X \\
+g_2 &= \mathbb{I} X X \mathbb{I}\mathbb{I} X X \\
+g_3 &= X \mathbb{I} X \mathbb{I} X \mathbb{I} X \\
+g_4 &= \mathbb{I}\mathbb{I}\mathbb{I} Z Z Z Z \\
+g_5 &= \mathbb{I} Z Z \mathbb{I}\mathbb{I} Z Z \\
+g_6 &= Z \mathbb{I} Z \mathbb{I} Z \mathbb{I} Z
+\end{align*}
+where $g_1, g_2, g_3$ are the $X$-type generators and $g_4, g_5, g_6$ are the $Z$-type generators. The logical operators are $\bar{X} = XXXXXXX$ and $\bar{Z} = ZZZZZZZ$.
+
+%The CSS structure has direct consequences for the implementability of logical gates. As discussed in \cref{subsec:cliffordplust}, Clifford gates map Pauli operators to Pauli operators under conjugation, which in a CSS code means they map $X$-type stabilizers to $X$-type stabilizers and $Z$-type to $Z$-type, preserving the code structure. In the Steane code specifically, the Hadamard gate is transversal: We can apply $H$ to each of the seven physical qubits individually to implement a logical $\bar{H}$, simply by swapping the $X$- and $Z$-type generators. The logical CNOT is similarly transversal, applied between corresponding physical qubits across two code blocks. This transversality of the Clifford gates makes the Steane code a natural candidate for fault-tolerant computation, and a standard reference point in quantum error correction research.
+
+The logical operators and encoding circuit for the Steane code were implemented explicitly in this project as $2^7 \times 2^7$ unitaries, making it the largest code for which full unitary simulation was tractable. The $T$-gate, as discussed in \cref{chap:t_gate}, is not transversal in the Steane code, as is guaranteed by the Eastin-Knill theorem, and its implementation requires the magic state distillation techniques described there.

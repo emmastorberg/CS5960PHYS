@@ -2,11 +2,15 @@ import numpy as np
 import jax
 import jax.numpy as jnp
 from functools import reduce
-from gates import pauli_x_gate, pauli_y_gate, pauli_z_gate, identity_gate, hadamard_gate
+from smaller_code_experiments.gates import pauli_x_gate, pauli_y_gate, pauli_z_gate, identity_gate, hadamard_gate
 
-# source: https://www.physics.unlv.edu/~bernard/MATH_book/Chap9/Notebook9_3.pdf
+"""
+Source: https://www.physics.unlv.edu/~bernard/MATH_book/Chap9/Notebook9_3.pdf
 
-"""Might not put errors occurring throughout the error correction, as long as the circuit is actually able to correct errors!"""
+Might not put errors occurring throughout the error correction,
+as long as the circuit is actually able to correct errors!
+
+"""
 
 tol = 1e-12
 p_error = 0.01
@@ -29,14 +33,6 @@ SYNDROME_TO_ERROR = {
     14: ("Y", 4),
     12: ("Z", 4),
 }
-
-# SYNDROME_TO_ERROR = {
-#     1: ("X", 1),
-#     8: ("X", 2),
-#     12: ("X", 3),
-#     6: ("X", 4),
-#     3: ("X", 5),
-# }
 
 ket0 = jnp.array([1, 0])
 ket1 = jnp.array([0, 1])
