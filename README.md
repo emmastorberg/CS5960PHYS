@@ -13,7 +13,7 @@ CS5960PHYS/
 │   ├── panqec_simulations/         # Simulations of quantum memory and some logical operators
 │   ├── smaller_codes/              # Proof-of-concept experiments with the 5- and 7-qubit codes
 │   └── t-gate_implementation/      # Implementation of T-gate
-├── Thesis/                         # Thesis manuscript sources (LaTeX)
+├── thesis/                         # Thesis manuscript sources (LaTeX)
 ├── pyproject.toml                  # uv environment specification
 └── README.md                       # Project overview, setup, and usage instructions
 ```
