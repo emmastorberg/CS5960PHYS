@@ -6,24 +6,36 @@ from matplotlib import lines as mlines
 
 # Shared style helpers
 
+# Okabe-Ito colorblind-safe palette (standard in academic publishing)
+# https://jfly.uni-koeln.de/color/
+OKABE_ITO = ['#0072B2', '#D55E00', '#009E73', '#CC79A7', '#E69F00', '#56B4E9', '#000000']
+
+# Marker convention: BB/gross codes use circles, toric codes use squares
+MARKER_BB    = 'o'
+MARKER_TORIC = 's'
+
+
 def _apply_style():
-    plt.style.use('seaborn-v0_8')
+    # seaborn-v0_8-white: clean white background with light gridlines, good for print
+    plt.style.use('seaborn-v0_8-white')
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
     plt.rc('text.latex', preamble=r'\usepackage{amsmath}')
     plt.rcParams.update({
-        'axes.labelsize': 14,
-        'axes.titlesize': 14,
+        'axes.labelsize': 13,
+        'axes.titlesize': 13,
         'xtick.labelsize': 10,
         'ytick.labelsize': 10,
-        'legend.title_fontsize': 10,
-        'legend.fontsize': 10,
+        'legend.title_fontsize': 9,
+        'legend.fontsize': 9,
         'font.size': 10,
-        'figure.titlesize': 16,
+        'figure.titlesize': 14,
+        'axes.grid': True,
+        'grid.linewidth': 0.5,
+        'grid.alpha': 0.5,
     })
-    custom_cycle = ["#009473", "#C74375", "#F0C05A", "#6667AB", '#0F4C81', '#9B1B30']
-    plt.rcParams["axes.prop_cycle"] = plt.cycler(color=custom_cycle)
-    return custom_cycle
+    plt.rcParams["axes.prop_cycle"] = plt.cycler(color=OKABE_ITO)
+    return OKABE_ITO
 
 
 def _savefig(fig, filename, savefig):
@@ -511,4 +523,150 @@ def plot_all(analysis_list, input_data_list,
     ax.legend(legend_lines, legend_labels)
     fig.tight_layout()
     _savefig(fig, filename, savefig)
+    plt.show()
+
+
+# ── plot_gross_vs_toric ───────────────────────────────────────────────────────
+
+def _extract_collapsed(analysis, input_data):
+    """Return (p_phys, p_logical, k_tot, d_min) collapsed over all patches."""
+    results = analysis.get_results()
+    grids = input_data['ranges']['code']['parameters']
+    n_Ls = len(grids)
+    n_vals = len(results['error_rate'].to_numpy())
+    n_trials_pr = int(len(results['n_trials']) / n_Ls)
+
+    def _reshape(col):
+        return results[col].to_numpy().reshape((n_Ls, n_vals // n_Ls)).T
+
+    code_params   = results['code_params'][::n_trials_pr]
+    num_logical   = results['k'][::n_trials_pr].values
+    distance      = results['d'][::n_trials_pr].values
+    p_phys_grid   = _reshape('error_rate')
+    p_est_grid    = _reshape('p_est')
+    p_se_grid     = _reshape('p_se')
+
+    total_success = np.ones(p_est_grid[:, 0].size)
+    k_tot = 0
+    for i, _ in enumerate(code_params):
+        k_tot += num_logical[i]
+        total_success *= (1 - p_est_grid[:, i])
+
+    p_phys    = p_phys_grid[:, 0]
+    p_logical = 1 - total_success
+    # propagate SE conservatively as RSS over patches (exact only for 1 patch)
+    p_se = np.sqrt(np.sum(p_se_grid ** 2, axis=1))
+
+    return p_phys, p_logical, p_se, int(k_tot), int(np.min(distance))
+
+
+def _extract_single(analysis, input_data):
+    """Return (p_phys, p_logical, p_se, k, d) for a single-patch simulation."""
+    results = analysis.get_results()
+    grids = input_data['ranges']['code']['parameters']
+    n_Ls = len(grids)
+    n_vals = len(results['error_rate'].to_numpy())
+    n_trials_pr = int(len(results['n_trials']) / n_Ls)
+
+    def _reshape(col):
+        return results[col].to_numpy().reshape((n_Ls, n_vals // n_Ls)).T
+
+    p_phys  = _reshape('error_rate')[:, 0]
+    p_est   = _reshape('p_est')[:, 0]
+    p_se    = _reshape('p_se')[:, 0]
+    k       = int(results['k'][::n_trials_pr].values[0])
+    d       = int(results['d'][::n_trials_pr].values[0])
+    n       = int(results['n'][::n_trials_pr].values[0])
+
+    return p_phys, p_est, p_se, k, d, n
+
+
+def plot_gross_vs_toric(gross_and_input,
+                        toric_k_and_input,
+                        toric_kd_and_input,
+                        savefig: bool = False,
+                        filename_colored: str = None):
+    """Plot gross code [[144,12,12]] against two toric code baselines.
+
+    Gross code in orange, both toric baselines in shades of blue to signal
+    same architecture at different scales. The toric baselines are collapsed
+    over all patches into one combined logical error rate curve.
+
+    Parameters
+    ----------
+    gross_and_input : tuple[Analysis, dict]
+        Single-patch gross code [[144,12,12]] simulation.
+    toric_k_and_input : tuple[Analysis, dict]
+        Toric patches collapsed to match k=12 (same k, lower d, higher n).
+    toric_kd_and_input : tuple[Analysis, dict]
+        Toric patches collapsed to match k=12, d=12 (same k and d, much higher n).
+    """
+    if filename_colored is None:
+        filename_colored = os.path.join('figures', 'gross_vs_toric.pdf')
+
+    _apply_style()
+
+    gross_analysis, gross_input     = gross_and_input
+    toric_k_analysis, toric_k_input = toric_k_and_input
+    toric_kd_analysis, toric_kd_input = toric_kd_and_input
+
+    p_gross, p_l_gross, p_se_gross, k_gross, d_gross, n_gross = _extract_single(
+        gross_analysis, gross_input
+    )
+    p_tk, p_l_tk, p_se_tk, k_tk, d_tk = _extract_collapsed(toric_k_analysis, toric_k_input)
+    p_tkd, p_l_tkd, p_se_tkd, k_tkd, d_tkd = _extract_collapsed(toric_kd_analysis, toric_kd_input)
+
+    # Infer n for toric patches from input grids
+    def _total_n(input_data):
+        grids = input_data['ranges']['code']['parameters']
+        return sum(2 * g['L_x'] * g['L_y'] for g in grids)
+
+    n_tk  = _total_n(toric_k_input)
+    n_tkd = _total_n(toric_kd_input)
+
+    # Gross code: saturated orange — immediately distinct from the toric family.
+    # Toric codes: two shades of blue — same family, different scale.
+    color_gross = '#E69F00'   # Okabe-Ito orange
+    color_tk    = '#6BAED6'   # lighter blue — matched k only (less similar to gross)
+    color_tkd   = '#0072B2'   # full blue — matched k and d (most similar to gross)
+
+    capsize, ms = 3, 3
+
+    gross_label = rf'Gross code $[\![{n_gross},{k_gross},{d_gross}]\!]$'
+    tk_label    = rf'Toric code $[\![{n_tk},{k_tk},{d_tk}]\!]$ (matched $k$)'
+    tkd_label   = rf'Toric code $[\![{n_tkd},{k_tkd},{d_tkd}]\!]$ (matched $k$, $d$)'
+
+    title = (
+        r'Logical error rate: gross code $[\![144,12,12]\!]$ vs.\ '
+        r'toric code' '\n'
+        r'at matched $k{=}12$ and matched $k{=}12,\,d{=}12$'
+    )
+
+    def _draw(ax):
+        ax.errorbar(p_tk, p_l_tk, p_se_tk,
+                    color=color_tk, marker=MARKER_TORIC, ms=ms, capsize=capsize,
+                    linestyle='solid', label=tk_label)
+        ax.errorbar(p_tkd, p_l_tkd, p_se_tkd,
+                    color=color_tkd, marker=MARKER_TORIC, ms=ms, capsize=capsize,
+                    linestyle='solid', label=tkd_label)
+        ax.errorbar(p_gross, p_l_gross, p_se_gross,
+                    color=color_gross, marker=MARKER_BB, ms=ms, capsize=capsize,
+                    linestyle='solid', label=gross_label)
+
+        p_all = np.concatenate([p_gross, p_tk, p_tkd])
+        dist = p_all.max() - p_all.min()
+        ax.set_xlim(p_all.min() - 0.03 * dist, p_all.max() + 0.03 * dist)
+        ax.set_ylim(0, 1.05)
+        ax.set_xlabel('Physical error rate')
+        ax.set_ylabel('Logical error rate')
+        handles, labels = ax.get_legend_handles_labels()
+        # gross code last in draw order but first in legend
+        order = [2, 0, 1]
+        ax.legend([handles[i] for i in order], [labels[i] for i in order])
+
+    fig, ax = plt.subplots(figsize=(7, 5))
+    _draw(ax)
+    ax.set_title(title)
+    fig.tight_layout()
+    _savefig(fig, filename_colored, savefig)
     plt.show()
