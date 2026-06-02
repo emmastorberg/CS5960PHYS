@@ -10,8 +10,8 @@
 \input{preamble/packages}
 \input{preamble/macros}
 
-\title{Master's Thesis}
-\subtitle{Grover's Algorithm and Quantum Error Correction}
+\title{Fault-Tolerant Resource Analysis of Grover's Algorithm on AES Under Alternate Architectures}
+%\subtitle{TBD}
 \author{Emma Storberg}
 
 \addbibresource{refs.bib}
@@ -20,38 +20,50 @@
 \uiomasterfp[
 	dept={Department of Physics},
 	program={Computational Science: Physics},
-	supervisors={Martin Strand, Thomas Gregersen, Joakim Bergli, Nadia Slavila Larsen},
+	supervisors={Martin Strand \and Joakim Bergli \and Thomas Gregersen \and Nadia Slavila Larsen},
 	long
 ]
 
 \frontmatter{}
 \begin{abstract}
-This thesis studies realistic resource requirements for applying Grover's algorithm to symmetric cryptanalysis under fault-tolerant assumptions.
-The work investigates how error-correcting architectures impact feasibility, with emphasis on quantum memory and logical operations.
-Implementations and simulations are developed for small code families, including the 5-qubit and 7-qubit codes, and exploratory analysis is performed for LDPC-style constructions such as surface and BB codes.
-The results provide practical insight into which design assumptions dominate runtime and overhead in near-term-to-fault-tolerant pathways.
+Grover's algorithm offers a quadratic speedup over classical brute-force search and is commonly cited as a quantum threat to AES. \textcite{jaques2024ches_presentation} argues that a physically realizable implementation capable of breaking AES-128 is essentially impossible, on the grounds of three constraints: the physical-to-logical qubit overhead of current error-correcting codes, the prohibitive cost of fault-tolerant gate implementation in these codes, and the poor parallelism of Grover's algorithm. Since the first two pillars are explicitly anchored to the surface code, this thesis asks whether his conclusion survives under the more resource-efficient Bivariate Bicycle (BB) code family. Using the stabilizer formalism for classical simulation, we compare the BB code against the surface code at the level of quantum memory, transversal gate noise, and magic state distillation. The BB code reduces physical qubit overhead by roughly an order of magnitude and achieves lower logical failure rates throughout the practically achievable error rate regime. Despite this, Jaques' conclusion survives: None of these improvements reduce the serial $T$-gate count or the time each magic state factory takes to produce a single magic state, leaving the runtime bottleneck intact. The binding constraint on a Grover-based attack on AES is not the choice of error-correcting code, but the $T$-gate cost of the oracle.
 \end{abstract}
 
+\chapter*{Acknowledgements}
+The inspiration for this thesis was sparked during conversations I had with Martin over the course of a summer at the Norwegian Defence Research Establishment. It was through those discussions, alongside the guidance of Thomas and Nadia, that I landed on a problem statement that allowed me to combine all the topics I was interested in and place them in a cryptographically relevant context. I am grateful to all three for their supervision throughout the project.
+I especially want to thank Joakim for meeting with me every week and offering his continual support. This project would not have been possible without you.
+
+Over the course of this project, I have received invaluable help from a number of people. A particular thank you to Samuel Jaques, whose work forms the foundation of much of this thesis and who was generous enough to discuss it with me directly. Thank you also to Delphine Martres, Jonas Lidal and Tron Omland for taking the time to meet with me and answer my questions.
+
+Finally, thank you to my good friends Jonatan, Jonas and Gaute for reading drafts and offering corrections.
+
+\hspace{0.5cm} \textit{--- Emma, June 2026}
+
+\chapter*{Declaration of AI Usage}
+
+Artificial intelligence tools were used in a supporting role throughout this project. For code, GitHub Copilot and Claude Code were used extensively to streamline my coding workflow, especially for generating and formatting plotting code. For learning, Claude Sonnet 4.6 and ChatGPT (free tier) were used as supplementary learning aids alongside academic literature, providing intuitive explanations of concepts. In writing, the same tools were used in an editorial capacity: for word choice and synonym suggestions, for reviewing drafts to catch errors, and occasionally for proposing restructurings or rephrasings of existing text. They were also used as search aids for queries too specific or technical for conventional search engines, and to format BibTex entries for references from sources that did not provide a downloadable citation file. 
+
+I have reviewed and verified all AI-assisted content in this thesis. The arguments and conclusions presented are entirely my own, and I take full responsibility for its content.
+
 \tableofcontents{}
-\listoffigures{}
-\listoftables{}
 
 \mainmatter{}
-\chapter{Introduction}
+%\chapter{Introduction}
 \include{chapters/intro}
-\chapter{Background}
+%\chapter{Background}
 \include{chapters/background}
-\chapter{Experiments and Analysis}
+%\chapter{Experiments and Analysis}
 \include{chapters/methods}
 \include{chapters/results}
-\chapter{Conclusion}
+%\chapter{Conclusion}
 \include{chapters/conclusion}
-\part*{Appendices}
+
+\addcontentsline{toc}{chapter}{\bibname}
+\printbibliography{}
+
 \appendix
 \crefalias{chapter}{appendix}
 \include{chapters/smaller_code_definitions}
-\include{chapters/verifying_transversality}
 
 \backmatter{}
-\printbibliography{}
 \end{document}

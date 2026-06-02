@@ -1,10 +1,86 @@
-%\section{Background}
-\section{Jaques' Argument}\label{sec:jaques}
-%We have now covered what we need to understand the argument Jaques makes \cite{jaques2024ches_presentation}.
+\chapter{Background}\label{chap:background}
 
-\todo[inline]{Write Jaques' line of argumentation, making clear which aspects are in the scope of this project and which are not. Motivate the questions we have that lead to the code experiments we do.}
+\section{The Case Against the Quantum Threat to AES}\label{sec:jaques}
+\textit{All information in this section is drawn from \textcite{jaques2024ches_presentation}.}
 
-here is another edit.  does this change things?
+
+A superficially alarming picture of AES's vulnerability to quantum computers is easy to construct. Asymptotically, Grover's algorithm offers a square-root speedup over classical brute-force search: Where a classical computer must check on the order of $2^{128}$ keys to break AES-128, Grover's requires only half as many quantum operations, on the order of $2^{64}$. This purported cost reduction of an attack on AES by way of Grover's algorithm gives the impression that the scheme is under threat, with its security effectively halved. 
+
+Early estimates of the quantum circuit implementing AES %as an oracle 
+as part of Grover's algorithm suggested it would require only a few thousand qubits, which sounds comparable to hardware specifications already being announced. The natural conclusion seems to be that doubling key sizes to AES-256 is an urgent priority, or that AES-128 is already under serious threat. Jaques systematically dismantles this conclusion. He identifies three distinct misconceptions, each of which individually complicates the picture, and whose combination makes a successful Grover-based attack on AES-128 appear essentially physically impossible.
+
+The first misconception is that qubit count is the binding constraint that prevents the construction of cryptographically relevant quantum computers. The early AES circuit estimates cited a figure of roughly 2,953 qubits, with an important caveat that this refers to the logical qubit count, not physical devices. Logical qubits are an abstraction encoded across thousands of noisy physical qubits using error-correcting codes, which is necessary because quantum hardware is corrupted by any uncontrolled interaction with its environment. Under the surface code, the dominant architecture in current fault-tolerant designs, the ratio between physical and logical qubits is not a small overhead, meaning an attack requiring thousands of logical qubits could demand millions of physical ones. Thus, we are further away from the required physical resources than it may seem initially.
+
+The second misconception is that the square-root speedup translates cleanly into a recommendation to double key sizes. Any realistic classical attack and its associated estimated runtimes contain the hidden assumption that we run the algorithm in parallel. In the classical case, parallelism is essentially free; we can divide the key space among $P$ machines and the time drops by a factor of $P$ at no extra cost. However, when we assume Grover's has a square-root speedup over the classical runtime, we cannot simply assume we have access to the same kind of parallelism. In fact, as we will see, the total number of operations across all machines to run Grover's algorithm actually grows with $P$. Thus, once the overhead of parallelism is accounted for, Jaques argues that the effective cost of breaking AES-128 rises above the naive $2^{64}$ figure.
+
+The third misconception is that the constant factor in the quantum attack's cost is small and well-understood. Implementing AES as a quantum circuit requires translating it into a gate set available on error-corrected hardware, and certain gates are enormously expensive in the surface code. Once the overhead of these gates and error correction cycles is included, the numbers become staggering: Even under the most permissive estimates of quantum computing capability\footnote{atomic-scale qubits with speed-of-light propagation running for a millennium} put forward by the National Institute of Standards and Technology (NIST), the required machine would need enough qubits to cover the surface of the moon, at a minimum energy cost equivalent to a full year's output of a nuclear power plant. Jaques' conclusion is simply that this will never be built.
+
+The broader point is not that AES is theoretically unbreakable by quantum algorithms. Rather, Jaques addresses three hurdles to real-world implemention (qubit overhead in logical circuits, poor parallelism and high gate implementation costs) that together indicate that the threat posed by Grover's algorithm to AES-128, as commonly framed, is not a serious near-term concern. The intuitive appeal of square root speedup resulting in half the security collapses once parallelism, error correction, and circuit implementation costs are considered in full rather than assumed away.
+
+\subsection{Extending the Analysis}
+The second pillar of Jaques' argument, regarding the poor parallelism of Grover's, rests on a property of the algorithm itself and is independent of architectural assumptions. The first and third pillars, however, are both necessarily tied to the current state of hardware: The physical-to-logical qubit ratio depends on the choice of error-correcting code, and the gate implementation cost is explicitly anchored to the surface code. Jaques acknowledges this himself, noting that future architectures may shift the relevant cost metrics in ways that are difficult to predict today. %In the spirit of that observation, this thesis attempts\todo{this last sentence is repetitive} to extend his analysis by examining what those costs might look like under alternative error correcting codes, namely the BB code family~\cite{Bravyi2024}, with the goal of either reinforcing his conclusion on broader grounds or identifying the conditions under which it might need to be revisited. 
+The following sections introduce the background necessary to extend his analysis under the assumption of alternative error correcting codes, namely the BB code family~\cite{Bravyi2024}.
+
+% Jaques says:
+
+% Grover's algorithm has a square root speedup over classical search that could be scary for certain cryptosystems. 
+
+% The cost of Grover's scales with number of iterations, and since $f$ is AES in this case, we know we need to run the entire AEs circuit per iteration.
+
+% Google and IBM do superconducting qubits.
+
+% Noise is any uncontrolled porcess which modifies the quantum data.
+
+% Argue that we need error correction because we will never reach the low physical error rates we otherwise need.
+
+% We protect against noise by adding redundancy.
+
+% Errors are suppressed exponentially with the width of the surface code square.
+
+% Surface codes today have d=7.
+
+% Improving physical qubit quality doesn't help us much.
+
+% Even if the probability is low, the cost of everything being broken is high, which motivates us to figure this out.
+
+% Everything interesting is in CSS codes.
+
+% The requirement that all checks for equality become 0 when XORed uniquely defines the code space.
+
+% We can think of stabilizers as a measurement.
+
+% Measuring the stabilizers will intrinsically collapse any error into a combination of bit flips and phase flips.
+
+% You have to do a lot of computation to maintain a state.
+
+% We made it very difficult for the neviornment to modify the quantum state. But we are the environment and need to modify the state, which we just made hard to do.
+
+% BeliefPropagation as a decoder is an alternative to minimum weight decoding.
+
+% With the T gate we need to make T states, which is a challenge. Both S and T require extra resource states S and T, but T gates consume the extra state.
+
+% There is now a new approach with some time or error rate tradeoffs but that are less resource intensive (however, time was already the problem for Grover's, right?)
+
+% You can have a circuit where oyu don't need T gates, but then you can't use anything interesting.
+
+% We use T gates in AND gates. They're the only one that needs T states ot do it. You can do it with 4 T gates
+
+% You don't need to do the X gates. I need more clarification on this.
+
+% Only ion traps make high rate qLDPC codes possible.
+
+% No easy way to compute in BB codes.
+
+% IBM has not released data from its chips
+
+% 4 long distance checks in the BB code?? Check this.
+
+% What do we optimize for?
+
+% If we pick any code it will be at most a constant factor away from the optimal code.
+
+
+
 % \sectionoutline{Not sure whether to include as a separate section or work parts of it into the intro/background/discussion wherever necessary.
 % In the normal case when we would use Grover's algorithm, we assume no structure. The argument for there being security in this case is that the number of potential keys is so large that we would not be able to do a brute-force search attack on a classic computer in any reasonable amoutn of time (brute-force being the only option here beceause there is no structure to the problem or the way the keys are determined). The circuit for the quantum algorithm Grover's is such that we may have a speedup on the order of the square root. We also know (from my own previous work) that the runtime of Grover's scales with the number of Grover iterates, which themselves scale with the number of queries to the arbitrary funciton $f$, or the AES algorithm in our case, which is needed to see if a binary string $x$ is a solution. Each Grover iteration requires running the entire AES encryption circuit, and this is the costly part.
 % There might also be constant factors here we don't know about, so to see the full picture, we need to know exactly how our $f$, namely AES, will be implemented in a circuit. Jacques provides a table of estimates of different values on page 20 of the PDF (slide 8 in the deck). The three quantities of apparent interest are Clifford gates (simple, computationally easy gates), T gates (a different type of gate that requires a huge number of qubits) and the depth, which I take to mean the number of gates that have to be applied serially, kind of functioning as a proxy for time (as they cannot be run in parallel). Finally, we have an estimate of a couple thousand logical qubits required for each size of AES in the table, but of course there could be millions of qubits hiding behind this number.
@@ -13,73 +89,81 @@ here is another edit.  does this change things?
 % %However, Grover doesn't parallelize well, as additional partitions add an overhead every time \todo{make a bigger section in background about this}(simple calculation/explanation on slide 33 in the deck). We could argue that since the classical cost is on the order of $2^{128}$ for AES-128 and Grover offers a square root speedup, the new cost will be $2^{64}$, with some small constant to account for overhead and setting up the quantum circuit. However, we have now shown that the bad parallelism of Grover means it is not on the order of $2^{64}$, and we have no idea what the constant will be if we use a different type of code other than surface codes.
 % This project will attempt to tackle just that. What happens if we use something else instead, and what might that be?}
 
-Jaques' argument fundamentally relies on the assumption that we will encode the Grover circuit with the Clifford+T gate set, where the number of T-gates is ultimately the determining factor in his estimation of the time complexity of the algorithm. However, if there were a better way to create the circuit that requires less T-gates (or T-gate equivalents), we could possibly see substantial improvements, since the huge estimated cost of implementing T-gates is a major contributor to why Grover's algorithm works out so poorly in practice.
+% Jaques' argument fundamentally relies on the assumption that we will encode the Grover circuit with the Clifford+T gate set, where the number of T-gates is ultimately the determining factor in his estimation of the time complexity of the algorithm. However, if there were a better way to create the circuit that requires less T-gates (or T-gate equivalents), we could possibly see substantial improvements, since the huge estimated cost of implementing T-gates is a major contributor to why Grover's algorithm works out so poorly in practice.
 
 \section{Grover's Algorithm for Solving Unstructured Search}\label{sec:grovers_explanation}
 \textit{\Cref{sec:grovers_explanation} is adapted from parts of my previous work \cite{ownwork}, with revisions and additions for clarity.}
-% Explain the principles of Grover’s algorithm. You should
-% explain the following points:
-% ▶ The problem the algorithm solves.
-% ▶ The relevant circuit diagram.
-% ▶ How the Grover iteration operates.
-% ▶ The complexity of the algorithm.
 
-% INTRODUCTION
-% What are we talking about here? What is the gist of it?
-
-% What is the status? Why do we need cryptography?
-% Symmetric cryptography is a thing, and the general strategy for beating it is doing a brute-force search. 
-% Grover's algorithm does this. Let's explore in more detail.
-
-% Link the cryptographical motivation to the formal description
-\subsection{The Problem Definition}
 Formally, the computational problem that Grover's algorithm addresses is a quite general problem known as \emph{unstructured search} \cite{Qiskit2023}. It can be described as follows:
-% \noindent\fcolorbox{black}{lightgray}{%
-%     \parbox{\textwidth}{%
-%         Let $\Sigma$ denote the binary alphabet $\{0,1\}$. Suppose we are given a function $f: \Sigma^n \rightarrow \Sigma$ that we can compute efficiently. We wish to determine the binary string $x \in \Sigma^n$ such that $f(x) = 1$, or ``no solution" if no such $x$ exists.
-%     }%
-% }
 \begin{center}
     \begin{tikzpicture}
     \node [mybox] (box){%
         \begin{minipage}{0.85\textwidth}
-            Let $\Sigma$ denote the binary alphabet $\{0,1\}$. Suppose we are given a function $f: \Sigma^n \rightarrow \Sigma$ that we can compute efficiently. We wish to determine the binary strings $x \in \Sigma^n$ such that $f(x) = 1$, or ``no solution'' if no such $x$ exists.
+            Let $\Sigma$ denote the binary alphabet $\{0,1\}$. Suppose we are given a function $f: \Sigma^n \rightarrow \Sigma$ that we can compute efficiently. We wish to determine the binary strings $x \in \Sigma^n$ such that $f(x) = 1$, or report that no solution exists.%``no solution'' if no such $x$ exists.
         \end{minipage}
     };
     \node[fancytitle, right=10pt] at (box.north west) {The unstructured search problem};
     \end{tikzpicture}%
 \end{center}
 %\vspace{0.5cm}
-We call this search problem \emph{unstructured} because $f$ can be an arbitrary function, meaning there is no underlying pattern or constraint, often called a \emph{promise} \cite{Qiskit2023}, that we can take advantage of to systematically search for a solution string $x$, if one even exists. This means that in the classical approach to solving this problem, we can be sure of the solution only after checking each of the $2^n$ possible strings, thus requiring $2^n$ queries. 
+We call this search problem \emph{unstructured} because $f$ can be an arbitrary function, meaning there is no underlying pattern or constraint, often called a \emph{promise} \cite{Qiskit2023}, that we can take advantage of to systematically search for a solution string $x$, if one even exists. This means that in the classical approach to solving this problem, we can be sure of the solution only after checking each of the $2^n = N$ possible strings, thus requiring $N$ queries. 
 
 %Its asymptotic runtime (meaning the approximate number of operations needed for the algorithm to run as a function of the decryption key length $N$) is $\mathcal{O}(\sqrt{N})$, compared to the classical approach with $\mathcal{O}(N)$ \cite{introQCbook}.
 
 %As we will see, Grover's algorithm offers a quadratic improvement over classical algorithms, meaning the number of operations needed when we use this quantum algorithm is on the order of the square-root of the number of operations required when solving the same problem classically.
 % DIAGRAM
 % This is the diagram. This is what the different parts do.
-\subsection{The Algorithm and Circuit}\label{subsec:grovers}
-\begin{center}
-    \begin{tikzpicture}
-    \node [mybox] (box){%
-        \begin{minipage}{0.85\textwidth}
-        The algorithm essentially consists of three main parts: we have initialization of $n$ qubits into an equal superposition (1), followed by $t$ Grover iterates (2), and finally measurement to reveal a candidate solution (3). These three stages are displayed and labeled in the circuit diagram below:
-        
-        \begin{center}
+
+
+\vspace{1.5cm}
+
+\begin{figure}[h!]
+    \begin{center}
             \begin{quantikz}
-                \lstick{} & \slice{1}            & \gate{H} \slice{2} & \gate[3]{\mathcal{G}} & \gate[3]{\mathcal{G}} & \ \ldots \ & \gate[3]{\mathcal{G}} \slice{3} & \meter{}\\
-                \lstick{\ket{0^n}} &                & \gate{H}           &                       &                       & \ \ldots \ &                                 & \meter{} \setwiretype{n} & \rstick{\phantom{\ket{0^n}}}\\
-                \lstick{} &                       & \gate{H}           &                       &                       & \ \ldots \ &                                 & \meter{}
+                % Annotation row — no wire, overbrace labels centred on each stage
+                \setwiretype{n} & \makebox[0pt][c]{$\overbrace{\hspace{1.1cm}}^{\raisebox{3pt}{\textbf{1}}}$}\setwiretype{n} & \setwiretype{n} & \setwiretype{n} & \hspace{-1.0cm}\makebox[0pt][c]{$\overbrace{\hspace{3.8cm}}^{\raisebox{3pt}{\textbf{2}}}$}\setwiretype{n} & \setwiretype{n} & \makebox[0pt][c]{$\overbrace{\hspace{1.1cm}}^{\raisebox{3pt}{\textbf{3}}}$}\setwiretype{n} \\[-4pt]
+                \lstick{} & \gate{H} & \gate[3]{\mathcal{G}} & \gate[3]{\mathcal{G}} & \ \ldots \ & \gate[3]{\mathcal{G}} & \meter{}\\
+                \lstick{\ket{0^n}} & \gate{H} & & & \ \ldots \ & & \meter{} & \setwiretype{n}\rstick{\phantom{\ket{0^n}}}\\
+                \lstick{} & \gate{H} & & & \ \ldots \ & & \meter{}
             \end{quantikz}
         \end{center}
-        \end{minipage}
-    };
-    \node[fancytitle, right=10pt] at (box.north west) {Circuit diagram of Grover's algorithm};
-    \end{tikzpicture}%
-\end{center}
+        \caption{Circuit diagram of Grover's algorithm, which essentially consists of three main parts: initialization of $n$ qubits into an equal superposition (\textbf{1}), followed by $t$ Grover iterations (\textbf{2}), and finally measurement to reveal a candidate solution (\textbf{3}).}\label{fig:grovers_circuit}
+\end{figure}
+
+\vspace{1.5cm}
+
+\subsection{The Algorithm and Circuit}\label{sec:grovers}
+% \begin{center}
+%     \begin{tikzpicture}
+%     \node [mybox] (box){%
+%         \begin{minipage}{0.85\textwidth}
+%         The algorithm essentially consists of three main parts: we have initialization of $n$ qubits into an equal superposition (\textbf{1}), followed by $t$ Grover iterations (\textbf{2}), and finally measurement to reveal a candidate solution (\textbf{3}). These three stages are displayed and labeled in the circuit diagram below:
+
+%         \begin{center}
+%             \begin{quantikz}
+%                 % Annotation row — no wire, overbrace labels centred on each stage
+%                 \setwiretype{n} & \makebox[0pt][c]{$\overbrace{\hspace{1.1cm}}^{\raisebox{3pt}{\textbf{1}}}$}\setwiretype{n} & \setwiretype{n} & \setwiretype{n} & \hspace{-1.0cm}\makebox[0pt][c]{$\overbrace{\hspace{3.8cm}}^{\raisebox{3pt}{\textbf{2}}}$}\setwiretype{n} & \setwiretype{n} & \makebox[0pt][c]{$\overbrace{\hspace{1.1cm}}^{\raisebox{3pt}{\textbf{3}}}$}\setwiretype{n} \\[-4pt]
+%                 \lstick{} & \gate{H} & \gate[3]{\mathcal{G}} & \gate[3]{\mathcal{G}} & \ \ldots \ & \gate[3]{\mathcal{G}} & \meter{}\\
+%                 \lstick{\ket{0^n}} & \gate{H} & & & \ \ldots \ & & \meter{} & \setwiretype{n}\rstick{\phantom{\ket{0^n}}}\\
+%                 \lstick{} & \gate{H} & & & \ \ldots \ & & \meter{}
+%             \end{quantikz}
+%         \end{center}
+%         \end{minipage}
+%     };
+%     \node[fancytitle, right=10pt] at (box.north west) {Circuit diagram of Grover's algorithm};
+%     \end{tikzpicture}%
+% \end{center}
 
 %What do we do?
 % Where are we making use of quantum phenomena to reduce computational time?
-Let's dive into the algorithm. Our first step is using the \emph{Hadamard gate} (denoted by $H$) \cite{quantumgates} on each of the $n$ input qubits. $H$ has no classical equivalent, and using it allows us to take advantage of a strictly quantum phenomenon known as \emph{superposition} \cite{superposition}. This means the qubit can evaluate to either 0 or 1, and we can apply processing to it as if the qubit holds both values simultaneously. Thus, in finding a binary string of length $n$, using the Hadamard gate on $\ket{0^{n}}$ lets us evaluate all $2^n$ strings in $\Sigma^n$ concurrently. For convenience, we will use the letter $N$ to refer to the value $2^n$ from this point on. Next is the Grover iteration step, represented by sequential application of the Grover operator $\mathcal{G}$ in the diagram.
+% Let's dive into the algorithm. Our first step is using the \emph{Hadamard gate} (denoted by $H$) \cite{quantumgates} on each of the $n$ input qubits. $H$ has no classical equivalent, and using it allows us to take advantage of a strictly quantum phenomenon known as \emph{superposition} \cite{superposition}. This means the qubit can evaluate to either 0 or 1, and we can apply processing to it as if the qubit holds both values simultaneously. Thus, in finding a binary string of length $n$, using the Hadamard gate on $\ket{0^{n}}$ lets us evaluate all $N$ strings in $\Sigma^n$ concurrently\todo{clean up this paragraph. what are we assuming?}. %For convenience, we will use the letter $N$ to refer to the value $2^n$ from this point on. 
+% Next is the Grover iteration step, represented by sequential application of the Grover operator $\mathcal{G}$ in the diagram.
+
+The circuit for Grover's algorithm is shown in \cref{fig:grovers_circuit}. We begin by applying $H$ to each of the $n$ input qubits, producing the
+uniform superposition $\frac{1}{\sqrt{N}}\sum_{x \in \Sigma^n}\ket{x}$ over
+all $N$ keys simultaneously. Next, the sequential application of the Grover operation $\mathcal{G}$ selectively amplifies the amplitude of
+the correct key before we measure to obtain a solution.
+
  %Its definition and circuit diagram are explained in detail on the next page\supervisors{Should I reference this more formally?}. 
 \begin{center}
     \begin{tikzpicture}
@@ -95,11 +179,13 @@ where $Z_f$ is the phase query gate for the function $f$, and $Z_{\text{OR}}$ is
     % \end{bmatrix}
     Z_f&: \ket{x} \mapsto (-1)^{f(x)}\ket{x} \hspace{0.6cm} \forall x \in \Sigma^n \\
     Z_{\text{OR}}&: \begin{cases}
-        \ket{x} \hspace{0.5cm} x = 0^n \hspace{0.6cm}% \forall x \in \Sigma^n\\
+        \ket{x} \hspace{0.5cm} x = 0^n \hspace{0.6cm} \\% \forall x \in \Sigma^n\\
         -\ket{x} \hspace{0.2cm} x \neq 0^n \hspace{0.6cm}% \forall x \in \Sigma^n
     \end{cases}
 \end{align*}
-Since the gates are applied from right to left, we apply $Z_f$ first, followed by $H$, then $Z_{\text{OR}}$, and finally another set of Hadamard gates. The circuit diagram of the Grover operation on three bits looks like this:
+Since the gates are applied from right to left, we apply $Z_f$ first, followed by $H$ on all qubits, then $Z_{\text{OR}}$, and finally another set of Hadamard gates. 
+This gate sequence has two conceptually distinct parts, which are worth naming explicitly. The first is the \emph{oracle} $Z_f$, which is a quantum circuit that evaluates the function $f$ and encodes the result as a phase, marking solution states with a sign flip without measuring or disturbing them. %In a cryptographic application, this oracle would be the full AES circuit. 
+The second is the \emph{diffusion operator}, implemented by $H^{\otimes n} Z_{\text{OR}} H^{\otimes n}$. It increases the amplitude of marked states relative to unmarked ones by reflecting the state vector about the uniform superposition. Together, the oracle and diffusion operator constitute a single Grover operation. The circuit diagram of the full operation $\mathcal{G}$ on three qubits looks like this:
 
 \begin{center}
     \begin{quantikz}
@@ -109,13 +195,13 @@ Since the gates are applied from right to left, we apply $Z_f$ first, followed b
     \end{quantikz}
 \end{center}
 
-Concerning evaluation of the circuit, only the $Z_f$ gate requires a query to $f$. Thus, the number of iterations $t$ we perform with $\mathcal{G}$ corresponds to how many queries to $f$ we need.
+Note that only the oracle requires a query to $f$. Thus, the number of queries to $f$ we need corresponds to the number of iterations $t$ of $\mathcal{G}$ we perform.
         \end{minipage}
     };
     \node[fancytitle, right=10pt] at (box.north west) {The Grover operation $\mathcal{G}$};
     \end{tikzpicture}%
 \end{center}
-A natural way to use the algorithm for search problems is to choose a number of iterations $t$ of the Grover operation, run the circuit to obtain a candidate solution $x$, and check if $x$ is a solution (in this case whether $f(x) = 1$). If so, we return $x$, otherwise we run the algorithm again (possibly with a different value for $t$) or return ``no solution''. This sounds simple enough, but still, important questions remain unanswered: What is the ``suitable'' number of operations $t$, how do we identify it, and why must it be chosen so precisely?
+A natural way to use the algorithm for search problems is to choose a number of iterations $t$ of the Grover operation, run the circuit to obtain a candidate solution $x$, and check if $x$ is a solution (in this case whether $f(x) = 1$). If so, we return $x$, otherwise we run the algorithm again (possibly with a different value for $t$) or return ``no solution''. This sounds simple enough, but still, important questions remain unanswered: What is the ``suitable'' number of operations $t$ and how do we identify it?
 
 To understand what is happening here, it is helpful to separate the possible solution strings in $\Sigma^n$ into two categories, which we will call solutions and nonsolutions. These sets can be described as follows:
 \begin{align*}
@@ -129,19 +215,20 @@ where $A_0$ contains all the strings that evaluate to 0 when given as input to $
 \end{align*}
 Importantly, we will assume from here on that $A_0$ and $A_1$ are both nonempty. However, we can still easily see what happens in the last two cases (all strings evaluate to 0, or all strings are solutions), as the former will return no solution, and in the latter case, any string is a solution. Since we are able to handle these special cases, we can safely continue our analysis under this assumption.
 
-An key observation here is the fact that we can write the initialized uniform superposition as a linear combination of the states $\ket{A_0}$
+A central observation here is the fact that we can write the initialized uniform superposition as a linear combination of the states $\ket{A_0}$
 and $\ket{A_1}$:
 \[H^{\otimes n} \ket{0^n} = \sqrt{\frac{|A_0|}{N}}\ket{A_0} + \sqrt{\frac{|A_1|}{N}}\ket{A_1}\]
 
 The key idea we utilize is this: \textbf{The state of the qubit register remains in the subspace spanned by} $\boldsymbol{\ket{A_0}}$
-\textbf{and} $\boldsymbol{\ket{A_1}}$ \textbf{after every application of} $\boldsymbol{\mathcal{G}}$. Thus, we would like to process the initialized state $H^{\otimes n} \ket{0^n}$ (with uniform amplitude across all $N$ components) such that through successive iterations, we nudge the amplitude of the solution component $\ket{A_1}$ slightly higher, while lowering the amplitude of the nonsolutions $\ket{A_0}$. As we know, in a quantum state vector, the amplitude of any component squared represents the probability of seeing that component after measurement. Provided we find the suitable number of iterations $t$, we can push the amplitude of the state corresponding to the solutions arbitrarily high, and consequently see a high probability that this state is measured.
+\textbf{and} $\boldsymbol{\ket{A_1}}$ \textbf{after every application of} $\boldsymbol{\mathcal{G}}$. Thus, we would like to process the initialized state $H^{\otimes n} \ket{0^n}$ (with uniform amplitude across all $N$ components) such that through successive iterations, we nudge the amplitude of the solution component $\ket{A_1}$ slightly higher, while lowering the amplitude of the nonsolutions $\ket{A_0}$. %As we know, in a quantum state vector, the amplitude of any component squared represents the probability of seeing that component after measurement\todo{vague, rewrite}. 
+Provided we find the suitable number of iterations $t$, we can push the amplitude of the state corresponding to the solutions arbitrarily high, and consequently see a high probability that this state is measured.
 
-We can show that by applying $\mathcal{G}$ on the $\ket{A_0}$ and $\ket{A_1}$, we obtain the following linear combinations \cite{Qiskit2023}\supervisors{Is the derivation of these expressions interesting content for an appendix, or do I just leave it?}:
+We can show that by applying $\mathcal{G}$ to $\ket{A_0}$ and $\ket{A_1}$, we obtain the following linear combinations \cite{Qiskit2023}:
 \begin{align*}
     \mathcal{G}\ket{A_0} &= \frac{|A_0|- |A_1|}{N}\ket{A_0} + \frac{2\sqrt{|A_0| \cdot |A_1|}}{N}\ket{A_1} \\
     \mathcal{G}\ket{A_1} &= -\frac{2\sqrt{|A_0| \cdot |A_1|}}{N}\ket{A_0} + \frac{|A_0|- |A_1|}{N}\ket{A_1}
 \end{align*}
-This clearly demonstrates that we are still in the span of $\ket{A_0}$ and $\ket{A_1}$ after an application of $\mathcal{G}$. Moreover, we can describe the action of $\mathcal{G}$ as a rotation matrix, and by once again following the example of \textcite{Qiskit2023}, we can also rewrite it as the square of a somewhat simpler-looking matrix:
+This clearly demonstrates that we are still in the span of $\ket{A_0}$ and $\ket{A_1}$ after an application of $\mathcal{G}$. Moreover, we can describe the action of $\mathcal{G}$ as a rotation matrix, and we can rewrite it as the square of a somewhat simpler-looking matrix \cite{Qiskit2023}:
 \[
 \begin{bmatrix}
     \frac{|A_0|- |A_1|}{N} & -\frac{2\sqrt{|A_0| \cdot |A_1|}}{N} \\
@@ -184,116 +271,135 @@ So, each time we apply $\mathcal{G}$, the state of the register is rotated by $2
     % \vdots\\
     \mathcal{G}^t \ket{u} = \cos ((2t+1)\theta) \ket{A_0} + \sin ((2t+1)\theta) \ket{A_1}
 \]
-This expression makes sense intuitively: $2\theta$ for each application of $\mathcal{G}$, and one additional $\theta$ to account for the state we started in.
+This expression makes sense intuitively: $2\theta$ for each application of $\mathcal{G}$, and one additional $\theta$ to account for the state we started in. Now recall that for any quantum state of the 
+form $\alpha\ket{A_0} + \beta \ket{A_1}$, we measure a solution $x \in A_1$ with probability $|\beta|^2$. With the state in question $\mathcal{G}^t \ket{u} = \cos ((2t+1)\theta) \ket{A_0} + \sin ((2t+1)\theta) \ket{A_1}$, the probability of measuring a solution after $t$ iterations is $\sin^2((2t+1)\theta)$. This is the probability we want to maximize in order to find a solution to the search problem with Grover's algorithm, and as such, we call $\ket{A_1}$ our \emph{target state}~\cite{Qiskit2023}. 
 
-Now recall that for any quantum state of the 
-form $\alpha\ket{A_0} + \beta \ket{A_1}$, we measure a solution $x \in A_1$ with probability $|\beta|^2$. With the state in question $\mathcal{G}^t \ket{u} = \cos ((2t+1)\theta) \ket{A_0} + \sin ((2t+1)\theta) \ket{A_1}$, the probability of measuring a solution after $t$ iterations is $\sin^2((2t+1)\theta)$. This is the probability we want to maximize in order to find a solution to the search problem with Grover's algorithm, and as such, we call $\ket{A_1}$ our \emph{target state} \cite{Qiskit2023}. 
+Another consideration is that we would also like to minimize $t$, as this is the number of queries to $f$ we have to make. Thus, to reach our target state with a probability close to 1 while minimizing $t$, we aim to find $t$ such that $(2t+1)\theta \approx \frac{\pi}{2}$, since this is the smallest angle where the square of the sine function equals 1. In terms of $t$, we aim for $t\approx\frac{\pi}{4\theta} - \frac{1}{2}$. We cannot guarantee that this value of $t$ is an integer, so we round down to find the number of iterations $t$, giving $t = \left \lfloor \frac{\pi}{4\theta} \right \rfloor$. For the algorithm to work properly, it is also important that we do not iterate past the recommended iteration number, lest we ``overshoot'' our solution by rotating past it. If we simply continue applying $\mathcal{G}$, we will in fact decrease the probability that the solution state is measured, and over time, we will oscillate between solutions and nonsolutions as we rotate the register state around the unit circle \cite{Qiskit2023}.
 
-Another consideration is that we would also like to minimize $t$, as this is the number of queries to $f$ we have to make. Thus, to reach our target state with a probability close to 1 while minimizing $t$, we aim to find $t$ such that $2(t+1)\theta \approx \frac{\pi}{2}$, since this is the smallest angle where the square of the sine function equals 1. In terms of $t$, we aim for $t\approx\frac{\pi}{4\theta} - \frac{1}{2}$. We cannot guarantee that this value of $t$ is an integer, so we find the number of iterations $t$ by choosing $t = \lfloor \frac{\pi}{4\theta} \rfloor$. For the algorithm to work properly, it is also important that we do not iterate past the recommended iteration number, lest we avoid ``overshooting'' our solution by rotating past it. If we simply continue applying $\mathcal{G}$, we will in fact decrease the probability that the solution state is measured, and over time, we will oscillate between solutions and nonsolutions as we rotate the register state around the unit circle \cite{Qiskit2023}.
+Up to this point, we have studied a general version of Grover's algorithm that can be applied to a number of search problems, ranging from those we know to have a single solution, a larger solution set of a fixed size, or even an unknown number of solutions. We have determined that an iteration number of $t = \left \lfloor \frac{\pi}{4\theta} \right \rfloor$ (and no more) will maximize the probability of finding one of these solutions, but what we must also consider is the fact that this way of setting iteration number $t$ also depends on how many solutions there are, as $\theta$ depends on the size of the set $A_1$. Fortunately, since we are considering only the cryptographic application of using the algorithm to search for a single key from some symmetric cryptographic protocol, we can restrict ourselves to the cases where we know there is exactly one solution (or one cryptographic key).
 
-Up to this point, we have studied a general version of Grover's algorithm that can be applied to a number of search problems, ranging from those we know to have a single solution, a larger solution set of a fixed size, or even an unknown number of solutions. We have determined that an iteration number of $t = \lfloor \frac{\pi}{4\theta} \rfloor$ (and no more) will maximize the probability of finding one of these solutions, but what we must also consider is the fact that this way of setting iteration number $t$ also depends on how many solutions there are, as $\theta$ depends on the size of the set $A_1$. Fortunately, since we are considering only the cryptographic application of using the algorithm to search for a single key from some symmetric cryptographic protocol, we can restrict ourselves to the cases where we know there is exactly one solution (or one cryptographic key).
+\emph{Unique search}, as this problem is formally known, is equivalent to the general unstructured search problem, with the additional promise that there is exactly one solution string $x$. Recall that in the general case, $\theta = \sin ^{-1} \left (\sqrt{\frac{|A_1|}{N}} \right )$. Now that we have determined there is only a single solution, we know that $|A_1| = 1$. Thus, for large $N$, we see that $\theta = \sin ^{-1} \left (\sqrt{\frac{1}{N}} \right ) \approx \sqrt{\frac{1}{N}}$, since for smaller angles, the sine function starts to look more like the identity function. % \cite{Qiskit2023}. 
+If we use this approximation of $\theta$ in our previously determined expression $t = \lfloor \frac{\pi}{4\theta} \rfloor$, we get $t = \lfloor \frac{\pi}{4}\sqrt{N} \rfloor$. Since $t$ represents queries to the function $f$, we see the quadratic improvement mentioned earlier: The query complexity decreases from $\mathcal{O}(N)$ classically to $\mathcal{O}(\sqrt{N})$ with Grover's algorithm. 
 
-\emph{Unique search}, as this problem is formally known, is equivalent to the general unstructured search problem, with the additional promise that there is exactly one solution string $x$. Recall that in the general case, $\theta = \sin ^{-1} \left (\sqrt{\frac{|A_1|}{N}} \right )$. Now that we have determined there is only a single solution, we know that $|A_1| = 1$. Thus, for large $N$, we see that $\theta = \sin ^{-1} \left (\sqrt{\frac{1}{N}} \right ) \approx \sqrt{\frac{1}{N}}$, since for smaller angles, the sine function starts to look more like the identity function \cite{Qiskit2023}. If we use this approximation of $\theta$ in our previously determined expression $t = \lfloor \frac{\pi}{4\theta} \rfloor$, we get $t = \lfloor \frac{\pi}{4}\sqrt{N} \rfloor$. Since $t$ represents queries to the function $f$, we see the quadratic improvement mentioned earlier: Rather than $N$ queries, we are now on the order of the square root of that. 
+\subsection{Practical Application and Limitations of Grover's Algorithm}\label{sec:parallelism_arg}
+At first glance, the improvements afforded by Grover's algorithm seem substantial. Though not a perfect algorithm in the sense that there is a probabilistic element and some chance of error\footnote{in contrast to the classical runtime we discussed, where the exhaustive search strategy leaves no chance of error whatsoever}, Grover's algorithm clearly has an advantage in runtime complexity over the classical strategy. Therefore, we identify that there is some trade-off between computational efficiency and certainty of outcome when choosing to use Grover's to tackle the unstructured search problem. In terms of correctness, it can be proven analytically that probability of success when using Grover's is always greater than or equal to $1 - \frac{1}{N}$ \cite{Qiskit2023}, meaning success is typically likely, particularly as $N$ grows large. We are also free to run the algorithm in its entirety as many times as we choose, and if any one of them succeeds, it will identify a solution, with a high chance of doing so using fewer queries to $f$ than its classical counterpart. With the classical cost on the order of $2^{128}$ for AES-128, a naive calculation finds the new cost with Grover's square-root speedup to be around $2^{64}$, perhaps with some small constant to account for overhead and setting up the quantum circuit. However, this estimation does not take into account a number of practical concerns and considerations.
 
-\subsubsection{Practical Application and Limitations of Grover's Algorithm}
-At first glance, the improvements afforded by Grover's algorithm seem substantial. Though not a perfect algorithm in the sense that there is a probabilistic element and some chance of error\footnote{in contrast to the classical runtime we discussed, where the exhaustive search strategy leaves no chance of error whatsoever}, Grover's clearly has an advantage in runtime complexity over the classical strategy. Therefore, we identify that there is some trade-off between computational efficiency and certainty of outcome when choosing to use Grover's to tackle the unstructured search problem. In terms of correctness, it can be proven analytically that probability of success when using Grover's is always greater than or equal to $1 - \frac{1}{N}$ \cite{Qiskit2023}, meaning success is typically likely, particularly as $N$ grows large. We are also free to run the algorithm in its entirety as many times as we choose, and if any one of them succeeds, it will identify a solution, with a high chance of doing so using fewer queries to $f$ than its classical counterpart. With the classical cost on the order of $2^{128}$ for AES-128, a naive calculation finds the new cost with Grover's square-root speedup to be around $2^{64}$, perhaps with some small constant to account for overhead and setting up the quantum circuit. However, this estimation does not take into account a number of practical concerns and considerations.
-
-First, Grover's algorithm, as described in \cref{subsec:grovers}, uses an oracle $f$, which in our case corresponds to the decryption algorithm in AES. A complicated scheme in its own right, AES must be implemented in the quantum hardware using computationally expensive gates and structures \cite{jaques2024ches_presentation,chen2025quantumcircuitimplementingaes}, which we introduce and discuss in more detail in \cref{subsec:universalgates}. This adds significant cost to the runtime of the algorithm \cite{jaques2024ches_presentation}, which the commonly cited Big O abstraction does not capture \cite{bigO}. Exploring circuit designs of AES and their costs is outside of the scope of this project, but it is an active field of research \cite{resourcefficientAES,cryptoeprint,chen2025quantumcircuitimplementingaes}
+First, Grover's algorithm, as described in \cref{sec:grovers}, uses an oracle $f$, which in our case corresponds to the encryption algorithm in AES. A complicated scheme in its own right, AES must be implemented in the quantum hardware using computationally expensive gates and structures \cite{jaques2024ches_presentation,chen2025quantumcircuitimplementingaes}, introduced and discussed in more detail in \cref{subsec:universalgates}. This adds significant cost to the runtime of the algorithm \cite{jaques2024ches_presentation}, which the commonly cited Big O abstraction does not capture. % \cite{bigO}. 
+Exploring circuit designs of AES and their costs is outside of the scope of this project, but it is an active field of research \cite{resourcefficientAES,cryptoeprint,chen2025quantumcircuitimplementingaes}
 that will be crucial for full asymptotic analysis and practical implementation of Grover's algorithm applied to AES.
 
 Secondly, as pointed out by Jaques, any realistic attack will require parallelization \cite{jaques2024ches_presentation}, and unfortunately, Grover's algorithm does not parallelize well. If we consider the full key space of $N$ keys and partition it into $P$ subsets, we can assign each of the $P$ partitions to a machine responsible for a search space containing $\frac{N}{P}$ keys. With the square-root speedup over the classical method as discussed, we can now find the key in $\mathcal{O}(\sqrt{\frac{N}{P}})$ time. When comparing this to serial Grover's with a runtime of $\mathcal{O}(\sqrt{N})$, we find that parallelizing only reduces the runtime by a factor of $\sqrt{P}$, not $P$. Worse yet, the additional partitions add an overhead, with the total cost of operations going up to $P \cdot \mathcal{O}(\sqrt{\frac{N}{P}}) = \mathcal{O}(\sqrt{P \cdot N})$. Thus, in our case with AES-128, the bad parallelism of Grover means its cost is certainly higher than the naive estimation of $2^{64}$. 
 
-The parallelization argument holds for any algorithm on the order of $\sqrt{N}$, and it turns out $\mathcal{O}(\sqrt{N})$ is the best we can do: For the general unstructured search problem, it has been proven that Grover's algorithm is \emph{asymptotically optimal} \cite{Bennett_1997, Zalka_1999}, meaning that as the search space grows, it is not possible to find an algorithm that performs better than on the order of $\sqrt{N}$ in the worst case. Despite its clear limitations, Grover's is thus still a contender to break the security of AES and similar symmetric encryption schemes by quantum computing, motivating the exploration we undertake in this project.
+The parallelization argument holds for any algorithm on the order of $\sqrt{N}$, and it turns out $\mathcal{O}(\sqrt{N})$ is the best we can do: For the general unstructured search problem, it has been proven that Grover's algorithm is \emph{asymptotically optimal} \cite{Bennett_1997, Zalka_1999}, meaning that as the search space grows, it is not possible to find an algorithm that performs better than on the order of $\sqrt{N}$ in the worst case. %Despite its clear limitations, Grover's is thus still a contender to break the security of AES and similar symmetric encryption schemes by quantum computing, motivating the exploration we undertake in this project.
 
 \section{Quantum Error Correction}\label{sec:QEC}
-\todo[inline]{Justify why we are even discussing QEC.}
-\sectionoutline{
-Quantum info is inherently fragile. QEC combats this. Threshold theorems say that with a low enough ohysical error rate the logical error rate can be made arbitrarily small. Sounds great, but we incur an overhead. How badly does this scale?
+To run Grover's algorithm in practice, or any other quantum algorithm, it is not enough to simply build the circuit in \cref{fig:grovers_circuit}. Real quantum hardware is inherently noisy: Every gate introduces small errors, and qubits continuously interact with their environment through a process known as \emph{decoherence} \cite{decoherence}, meaning even when qubits are idle and simply acting as memory, the data they store can be lost or corrupted. At the scale required to evaluate the AES oracle inside Grover's algorithm, these errors accumulate to the point where the output of the circuit becomes unreliable \cite{jaques2024ches_presentation}. The prevailing approach to managing this issue is encoding logical information redundantly across many physical qubits, rather than attempting to perfect individual qubit quality to the point where errors become negligible, as the former is generally considered the easier path forward from an engineering standpoint \cite{jaques2024ches_presentation}. We call this framework \emph{quantum error correction} (QEC), the general structure of which is shown in the following circuit diagram:
 
-Measurement discretizes the noise. See image on phone.}
+\begin{center}
+\begin{quantikz}[row sep={1cm,between origins}, column sep=0.5cm]
+\lstick{Encoded state} & \gate{\text{Noise}} & \ctrl{1} & \qw        & \qw            & \gate{\text{Correction}} & \qw \\
+\lstick{Ancillas}      & \qw          & \gate{U} & \meter{}   & \gate{\text{Decoder}} & \cwbend{-1}
+\end{quantikz}
+\end{center}
 
-\subsection{Stable Quantum Memory}
-As we briefly touched upon, future quantum computers will certainly require some form of error correction, as quantum systems are prone to noise, causing logical errors during computation. Unlike in a classical computer where the only errors we consider are bit-flip errors (where 0 is interpreted as 1, or vice versa), quantum information can in principle be affected by a continuous space of errors. This turns out to be more manageable than it seems at first glance, however. To understand why, note that the set of Pauli matrices $\{\mathbb{I}_2, X, Y, Z\}$ forms a basis for $\mathbb{C}^{2 \times 2}$ \cite{Nielsen_Chuang_2010}, meaning any error $E$ on a single qubit can be decomposed linearly as: 
+In the circuit, we see that noise acts on the encoded state, and we make use of extra qubits called \emph{ancillas}. By some process $U$, typically an \emph{error-correcting code}, which we return to in \cref{sec:toriccode}, we are able to detect the errors that have occurred and store that information in the ancillary qubits, which can be measured. The result of the ancilla measurement tells us what corrections to apply to restore the logical state, all without ever directly measuring (and thus disturbing) the encoded logical state.
+
+%\subsection{Stable Quantum Memory}
+%{\color{red}As we briefly touched upon, future quantum computers will certainly require some form of error correction, as quantum systems are prone to noise, causing logical errors during computation.} 
+Unlike in a classical computer where the only errors we consider are bit-flip errors (where 0 is interpreted as 1, or vice versa), quantum information can in principle be affected by a continuous space of errors. This turns out to be more manageable than it seems at first glance. To understand why, note that the set of Pauli matrices $\{\mathbb{I}_2, X, Y, Z\}$ forms a basis for $\mathbb{C}^{2 \times 2}$ \cite{Nielsen_Chuang_2010}, meaning any error $E$ on a single qubit can be decomposed linearly as:
 \[
-E = \alpha \mathbb{I}_2 + \beta X + \gamma Z + \delta Y \quad \alpha, \beta, \gamma, \delta \in \mathbb{R}.
+E = \alpha \mathbb{I}_2 + \beta X + \gamma Z + \delta Y \quad \alpha, \beta, \gamma, \delta \in \mathbb{C}.
 \]
-Since we have the relation $Y = i X Z$, we see that a $Y$-error can be expressed as a simultaneous $X$- and $Z$-error, which can be corrected with independent $X$ and $Z$ corrections. This discretization leaves only two types of errors we must correct that span all possible single-qubit errors (up to a global phase): $X$-errors, corresponding to bit-flips, and $Z$-errors, corresponding to phase-flips.
+Although physical noise can in principle be any continuous perturbation, any such error is projected onto one of these discrete Pauli components the moment a measurement is performed. Just as measuring a superposition yields a single definite outcome, measuring a system affected by a continuous error forces it into a definite $X$-, $Z$-, or $Y$-error. Since $X^2 = Y^2 = Z^2 = I$, errors are corrected simply by applying the corresponding Pauli operator to the affected qubit, as identified by the syndrome measurement. 
 
-Having two types of fundamental errors to correct, compared to only one classically, in combination with quantum hardware being inherently more difficult to work with from an engineering perspective, has the unfortunate result of massively complicating the circuitry required for computation as soon as any practically viable error correction measures are introduced. The prevailing approach to managing this complexity is to encode logical information redundantly across many physical qubits, rather than attempting to perfect individual qubit quality to the point where errors become negligible, as the former is generally considered the easier path forward from an engineering standpoint \cite{jaques2024ches_presentation}. This scheme, which can detect and correct errors without directly measurements, is what we call a \emph{quantum error correcting code}. Exploring the challenges associated with encoding information in this way is the focal point of this project, which will be revisited in more detail in \cref{subsec:universalgates}.
+This discretization of a continuous error space into Pauli errors is powerful on its own, but we can reduce the possible error types even more by considering the relation $Y = i X Z$. A $Y$-error can be expressed as a simultaneous $X$- and $Z$-error, which can be corrected with independent $X$- and $Z$-corrections. Ultimately, these are the only two types of errors we must correct to span all possible single-qubit errors (up to a global phase),  with $X$- and $Z$-errors corresponding to bit- and phase-flips respectively. Still, having two types of fundamental errors to correct, compared to only one classically, in combination with quantum hardware being inherently more difficult to work with from an engineering perspective, has the unfortunate result of massively complicating the circuitry required for computation as soon as any practically viable error correction measures are introduced. 
 
-\subsubsection{Toric Surface Code}
-The standard method of error correction that is used in all existing quantum computers built for fault-tolerance \supervisors{In general, how do I say or cite statements about what the landscape in the field looks like right now?} is the \emph{surface code}. There is some inconsistency in the literature about what constitutes a \emph{toric code}, a \emph{surface code}, and a \emph{toric surface code}. We adhere to the nomenclature set by IBM \cite{ibm_quantum_other_code_families}, where toric codes exist in a grid across the surface of a torus with periodic boundary conditions, and surface codes and toric surface codes are used interchangeably to refer specifically to the portion of a torus grid laid flat with non-periodic boundary conditions.
+The central theoretical guarantee is the \emph{threshold theorem} \cite{Nielsen_Chuang_2010}: If the physical error rate per gate is below a code-dependent threshold value, the logical error rate can be made arbitrarily small by increasing the number of physical qubits used to encode each logical qubit. This sounds promising, because it means that in principle, noise is not a serious problem for quantum computation. However, this comes at a steep cost. More physical qubits per logical qubit means larger, deeper circuits and higher gate counts. Exploring the challenges and tradeoffs associated with encoding information in this way is the focal point of this project, which will be revisited in more detail in \cref{subsec:universalgates}.
 
-Following the discovery of the toric code in 1997 \cite{Kitaev_2003}, toric surface code has remained a prevalent error correcting architecture because it is based on simple principles and maintains geometric locality, meaning the only links required are between neighboring qubits, as opposed to also needing support for long-distance connections between qubits, which are more challenging from an engineering standpoint. In essence, surface code works by creating a grid of data qubits and measurement qubits interspersed and defining \emph{stabilizers} that flag bit-flip ($X$) errors and phase-flip ($Z$) errors when they occur in specific locations. The error correcting capability lies in measuring the stabilizers across the grid repeatedly, decoding where errors have occured, and applying the appropriate correction based on the stabilizer measurement. The stabilizer formalism can in many ways be viewed as the quantum generalization of parity checks \cite{paritycheckstabilizerwiki,pesah2023_stabilizer_trilogy1}, which are often used similarly in classical error correction to identify where and how to restore corrupted data.
+\subsection{Toric Surface Code}\label{sec:toriccode}
+The dominant method of error correction in fault-tolerant quantum computing, and the one used by leading implementations such as Google's, is the \emph{surface code} \cite{GoogleQuantumAI2025}. There is some inconsistency in the literature about what constitutes a \emph{toric code}, a \emph{surface code}, and a \emph{toric surface code}. We adhere to the nomenclature set by IBM \cite{ibm_quantum_other_code_families}, where toric codes exist in a grid across the surface of a torus with periodic boundary conditions, and surface codes and toric surface codes are used interchangeably to refer specifically to the portion of a torus grid laid flat with non-periodic boundary conditions.
+
+Following the discovery of the toric code in 1997 \cite{Kit97}, toric surface code has remained a prevalent error-correcting architecture due to its conceptual simplicity and geometric locality, requiring only nearest-neighbor qubit interactions, which are significantly easier to engineer than long-range connections. In essence, surface code works by creating a grid of data qubits and measurement qubits interspersed and defining \emph{stabilizers} that flag $X$-errors and $Z$-errors when they occur in specific locations. The error correcting capability lies in measuring the stabilizers across the grid repeatedly, decoding where errors have occurred, and applying the appropriate correction based on the stabilizer measurement. The stabilizer formalism can in many ways be viewed as the quantum generalization of parity checks \cite{paritycheckstabilizerwiki,pesah2023_stabilizer_trilogy1}, which are often used similarly in classical error correction to identify where and how to restore corrupted data.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics{figures/quantumrep-07-00025-g001.png}
-    \caption{A surface code grid with physical data qubits located on the edges, demonstrating a plaquette ($Z$ stabilizer) in blue and a vertex ($X$ stabilizer) in red. Although only one of each is shown here, the entire grid is covered in these stabilizers in a repeating pattern.\\
-    Image source: \textcite{quantum7020025}\\
-    \textcolor{red}{WILL BE REPLACED WITH MY OWN MORE EXPLANATORY DIAGRAM.}}\label{fig:stabilizerdiagram}
+    \includegraphics[width=0.55\linewidth]{surface_code_stabilizers.pdf}
+    \caption{A $5\times5$ surface code lattice. Data qubits (black circles) lie on the edges of the grid. Each vertex $v$ defines $\text{star}(v)$, the set of edges incident to it, and hosts a pink $X$-type stabilizer acting on those data qubits. Each plaquette $p$ defines $\text{boundary}(p)$, the set of edges surrounding it, and hosts a teal $Z$-type stabilizer acting on those data  qubits. Colored circles at every $v$ and $p$ are ancilla qubits used to measure the respective stabilizers. Together the stabilizers tile the lattice in a checkerboard pattern.}\label{fig:stabilizerdiagram}
 \end{figure}
 
-In \cref{fig:stabilizerdiagram}, we show how taking four qubits surrounding a vertex or a square face in the grid (known as a \emph{plaquette}) defines an $X$ or $Z$ stabilizer respectively. Check qubits for measurements in the stabilizers are a crucial element of quantum error correction specifically, as measuring the actual state of data qubits to identify data corruption would destroy their states, and thus the data itself. 
+As an illustrative example, \cref{fig:stabilizerdiagram} shows a small surface code with a grid of these stabilizers. Data qubits lie on the edges of the grid, shown as black circles. $X$-type stabilizers (pink) are centered at grid vertices, hence the name \emph{vertex stabilizers}. Each vertex $v$ defines a set $\text{star}(v)$ consisting of the (up to four) edges incident to $v$, and the corresponding stabilizer acts on exactly those data qubits. One such stabilizer is highlighted with pink arms tracing $\text{star}(v)$, marking the data qubits $v$ stabilizes. The $Z$-type stabilizers (green) are the square faces of the grid, each acting on the four data qubits along its boundary. Each such face $p$, which we call a \emph{plaquette}, defines a set $\text{boundary}(p)$ consisting of the four edges surrounding it, and the corresponding stabilizer acts on those data qubits. One plaquette is highlighted in teal, tracing the data qubits in $\text{boundary}(p)$. The $Z$-type stabilizers associated with these plaquettes are known interchangeably as \emph{face stabilizers} and 
+\emph{plaquette stabilizers}.
 
-\supervisorsinline{I am aware "star" and "boundary" are not defined properly. I may slightly alter the flow here once I remake the graphic to rely on the visual more for the explanation.}
-The stabilizer formalism allows us to define algebraically the units described visually in \cref{fig:stabilizerdiagram} with two sets of commuting stabilizer generators. For each vertex $v$ in the grid, we have an $X$ stabilizer
+Ancillary check qubits (colored circles) sit at each vertex $v$ and plaquette 
+center $p$, measuring the $X$- and $Z$-type stabilizers respectively. Being able to use check qubits for measurements in the stabilizers are a crucial element of quantum error correction specifically, as measuring the actual state of data qubits to identify data corruption would destroy their states, and thus the data itself.
+
+The stabilizer formalism allows us to define algebraically the units described visually in \cref{fig:stabilizerdiagram} with two sets of commuting stabilizer generators. For each vertex $v$ in the grid, we have an $X$-stabilizer
 \[S^X_v = \prod_{j \in \text{star}(v)} X_j,\]
-which multiplies the Pauli $X$ operator on the four edges touching $v$, or fewer at the grid boundaries. We similarly define a $Z$ stabilizer for each plaquette $p$ as
+which multiplies the Pauli $X$ operator on the four qubits touching $v$, or fewer at the grid boundaries. We similarly define a $Z$ stabilizer for each plaquette $p$ as
 \[S^Z_p = \prod_{j \in \text{boundary}(p)} Z_j,\]
-which multiplies the Pauli $Z$ operator on the edges surrounding $p$. The groups formed by all $S^X$ and $S^Z$ respectively have elements that are all tensor products of Pauli operators and that commute. Together, each of these groups has a shared eigenspace constrained by 
+which multiplies the Pauli $Z$ operator on the qubits surrounding $p$. In general, a stabilizer code encoding $k$ logical qubits into $n$ physical qubits requires exactly $n-k$ independent generators, which becomes $n-1$ in the surface code with $k=1$. In the $5\times5$ example in \cref{fig:stabilizerdiagram}, there are 40 data qubits and 41 defined stabilizers (25 vertex, 16 face), of which exactly 39 are independent due to one linear dependency in each type.
+
+The groups formed by all $S^X$ and $S^Z$ respectively have elements that are all tensor products of Pauli operators and that commute. Together, each of these groups has a shared eigenspace constrained by 
 \[S_i \ket{\psi} = + \ket{\psi} \hspace{0.5cm} \forall i,\]
 where $S_i$ represents a general stabilizer (either $X$ or $Z$) applied to an appropriate vertex or plaquette, denoted by $i$. This eigenspace contains the legal code words, or in this case, the states corresponding to logical 0 and logical 1 (henceforth denoted by $\ket{0}_L$ and $\ket{1}_L$ respectively).
 
-The Pauli operators satisfy the anticommutation relation $\sigma_j \sigma_k + \sigma_k \sigma_j  = 2\delta_{jk} \mathbb{I}_2$, where $\sigma_i$ are the Pauli operators according to the naming convention $\sigma_1 = X, \sigma_2 = Y, \sigma_3 = Z$, $\delta_{jk}$ is the Kronecker delta and $\mathbb{I}_2$ is the $2 \times 2$ identity matrix \cite{paulimatrices}. Thus, if an error operator $E$ commutes with a stabilizer $S_i$, the eigenvalue of the surrounding qubits' state is unchanged:
+The Pauli operators satisfy the anticommutation relation $\sigma_j \sigma_k + \sigma_k \sigma_j  = 2\delta_{jk} \mathbb{I}_2$, where $\sigma_i$ are the Pauli operators according to the naming convention $\sigma_1 = X, \sigma_2 = Y, \sigma_3 = Z$, and $\delta_{jk}$ is the Kronecker delta \cite{paulimatrices}. Thus, if an error operator $E$ commutes with a stabilizer $S_i$, the eigenvalue of the surrounding qubits' state is unchanged:
 \[
 S_i(E\ket{\psi}) = E(S_i\ket{\psi}) = +E\ket{\psi}.
 \]
-However, if $E$ and $S_i$ anticommute, we will have $S_i(E\ket{\psi}) = -E(S_i\ket{\psi})$ instead, which changes the eigenvalue of the local stabilizer state from +1 to $-1$. 
+However, if $E$ and $S_i$ anticommute , we will have $S_i(E\ket{\psi}) = -E(S_i\ket{\psi})$ instead, which changes the eigenvalue of the local stabilizer state from +1 to $-1$. Since any two Pauli operators either commute or anticommute, and since errors are always projected onto Pauli components upon measurement (as established in \cref{sec:QEC}), these two cases are exhaustive.
 
-At this point, we can do a measurement of the ancillary check qubits of the stabilizers to determine which ones violate our constraints and flag errors in their neighbors. Thinking back to the notion of parity checks, we consider the result of each stabilizer measurements a remapping of the parity check values 0 and 1 to +1 and $-1$ respectively. This is a very convenient mapping for us, because when we work with $Z$ operators, $\pm 1$ happen to be the eigenvalues of the eigenstates $\ket{0}$ and $\ket{1}$. Thus, $\pm 1$ represent a way for us to access information about the state without measuring the state itself. In other words, if we measure the check qubits in the stabilizers and see $\ket{0}$, we know the data qubits are in the eigenstate +1, and we conclude no error has occurred among the neighboring qubits of this stabilizer. However, if we see $\ket{1}$, we know the surrounding data qubits are in the eigenstate $-1$, and an error has occurred here. A measurement of an $X$-stabilizer is slightly more involved, but still unproblematic; the relation $HXH = Z$ allows us to simply apply $H$ and do a measurement of $Z$-stabilizer instead. 
+At this point, we can do a measurement of the ancillary check qubits of the stabilizers to determine which ones violate our constraints and flag errors in their neighbors. Thinking back to the notion of parity checks, we consider the result of each stabilizer measurement a remapping of the parity check values 0 and 1 to +1 and $-1$ respectively. This is a very convenient mapping for us, because when we work with $Z$ operators, $\pm 1$ happen to be the eigenvalues of the eigenstates $\ket{0}$ and $\ket{1}$. 
+%Thus, $\pm 1$ represent a way for us to access information about the state without measuring the state itself\todo{from Joakim: make clearer}. In other words, i
+If we measure the check qubits in the stabilizers and see $\ket{0}$, we know the data qubits are in the eigenstate +1, and we conclude no error has occurred among the neighboring qubits of this stabilizer. However, if we see $\ket{1}$, we know the surrounding data qubits are in the eigenstate $-1$, and an error has occurred here. A measurement of an $X$-stabilizer is slightly more involved, but still unproblematic; the relation $HXH = Z$ allows us to simply apply $H$ to the ancillary check qubit and do a measurement as if it were a $Z$-stabilizer instead. 
 
 Together, the eigenvalues $s_i$ that we observe at each of the $m$ stabilizer measurements form a string $(s_1, s_2, \dots, s_{m-1}, s_m) \in \{\pm1\}^m$ that we call the \emph{syndrome} of the full state. It tells us about what errors are likely to have occurred and where, which we can use to determine what corrections we would like to apply to restore the logical state. It should be noted, however, that the syndrome cannot distinguish between no error and an even number of errors on the same stabilizer's neighbors, as both produce a +1 eigenvalue, leaving an undetectable error. This is a fundamental limitation of stabilizer codes generally, not specific to the surface code.
 %This approach can be used to identify where errors occur, which we can apply the mostly likely stabilizer correction chain to.
 %This writeup --> https://github.com/mcclow12/Quantum-Computing-Surface-Code-Simulation/blob/master/writeup.pdf explains surface code pretty well. May be worth testing out their Jupyter notebook too. 
 
-While conceptually simple, the toric surface code has a clear drawback in that it is very qubit-hungry, with estimates predicting a ratio around a 1000 to 1 of physical to logical qubits required for realistic error rates \cite{jaques2024ches_presentation,Gidney2025}. This has sparked further study and innovation in order to uncover more favorable schemes in terms of resource efficiency \cite{Bravyi2024}\supervisors{Does this need any more sources when I'm trying to use it as a segue into BB codes?}.
+While conceptually simple, the toric surface code has a clear drawback in that it is very qubit-hungry, with estimates predicting on the order of 1000 physical qubits per logical qubit at realistic error rates \cite{jaques2024ches_presentation,Gidney2025}. This has sparked further study and innovation in order to uncover more favorable schemes in terms of resource efficiency \cite{Bravyi2024}.
 
-\subsubsection{Bivariate Bicycle Code: An Alternative to Toric Surface Code}
-\supervisorsinline{The sentences in red imply we have already discussed Jaques' argument, which currently doesn't show up until way later in the text, but we need to go through the background to fully understand his argument. What is the best way to order this? One solution is just cutting them, thoughts?}
-\textcolor{red}{The continued usage of the surface code at the current correction rates is one of the underlying assumptions in Jaques' predictions}. 
-\textcolor{red}{Thus, it is interesting for the sake of our analysis to see how the prognosis for Grover's algorithm changes with a different choice of error correcting code. }A few promising examples can be found in the \emph{Low Density Parity Check} (LDPC) family of codes, of which the surface code is a special case. LDPC codes are stabilizer codes where each stabilizer acts on a fixed, small number of qubits, and each qubit participates in a fixed, small number of checks, both independent of the code size. For instance, in the surface code, each stabilizer acts on exactly four qubits (or fewer at boundaries) and each qubit participates in exactly two $X$-type and two $Z$-type checks. This property makes LDPC codes a strong contender for practical architectures, since stabilizer measurements remain local and manageable even as the code scales. 
+\subsection{Bivariate Bicycle Code: An Alternative to Toric Surface Code}\label{sec:bb_code}
+The continued usage of the surface code at current correction rates is one of the underlying assumptions in Jaques' predictions. 
+Thus, it is interesting for the sake of our analysis to see how the prognosis for Grover's algorithm changes with a different choice of error correcting code. A few promising examples can be found in the \emph{Low Density Parity Check} (LDPC) family of codes, of which the surface code is a special case. LDPC codes are stabilizer codes where each stabilizer acts on a fixed, small number of qubits, and each qubit participates in a fixed, small number of checks, both independent of the code size. For instance, in the surface code, each stabilizer acts on exactly four qubits (or fewer at boundaries) and each qubit participates in exactly two $X$-type and two $Z$-type checks. This property makes LDPC codes a strong contender for practical architectures, since stabilizer measurements remain manageable even as the code scales.
 
-The \emph{Bivariate Bicycle code}, also known as BB code, is one of these potential candidates to replace the surface code, also in the LDPC family \cite{Bravyi2024}. Though similar to surface codes at a high level of abstraction, BB codes differ in that their stabilizers are not geometrically local, and has therefore been called ``surface code with extra long-distance checks'' \cite{sommerstudentNSM}. These checks allow for a number of advantages over the surface code, such as a higher threshold for error correction and lower qubit overhead \cite{Bravyi2024}. 
+\emph{Bivariate Bicycle codes}, also known as BB codes, are one of these potential candidates to replace surface codes, also in the LDPC family \cite{Bravyi2024}. Though similar to surface codes at a high level of abstraction, BB codes differ in that their stabilizers are not geometrically local, and have therefore been called ``surface code with extra long-distance checks'' \cite{sommerstudentNSM}. These checks allow for a number of advantages over the surface code, such as a higher threshold for error correction and lower qubit overhead \cite{Bravyi2024}. 
 
 %Following the example of \textcite{sommerstudentNSM}, 
 We begin by defining the following shift matrices:
 \[x = P_{\ell} \otimes \mathbb{I}_m, \hspace{0.3cm} y = \mathbb{I}_{\ell} \otimes P_{m},\]
-where $\mathbb{I}_m$ is the $m \times m$ identity matrix and $P$ is a cyclic permutation matrix in the form $\sum_{i=1}^{\ell} \ket{i}\bra{i+1}$, which maps $\ket{i+1}$ to $\ket{i}$ \cite{sommerstudentNSM}. In addition, $x$ and $y$ satisfy $xy = yx$ and $x^{\ell} = y^m = \mathbb{I}_{\ell \times m}$. We use $x$ and $y$ to represent stepping through the grid in the $x$- and $y$-direction respectively.
+where $P$ is a cyclic permutation matrix in the form $\sum_{i=1}^{\ell} \ket{i}\bra{i+1}$, which maps $\ket{i+1}$ to $\ket{i}$ \cite{sommerstudentNSM}. Note that the Dirac notation here is simply used to describe the outer product and thus algebraically define these matrices, not as a reference to a specific quantum state. In addition, the matrices $x$ and $y$ satisfy $xy = yx$ and $x^{\ell} = y^m = \mathbb{I}_{\ell m}$. We use $x$ and $y$ to represent stepping through the grid in the $x$- and $y$-direction respectively.
 
-Formally, the BB code is defined as a pair of $\ell m \times \ell m$ binary matrices $A(x, y), B(x,y)$ that are sums of our shift matrices $x$ and $y$ to integer powers. These matrix polynomials are then used to define parity check matrices $H^X$ and $H^Z$:
+Formally, the BB code is defined as a pair of $\ell m \times \ell m$ binary matrices:
+\[A = A_1 + A_2 + A_3\]
+\[B = B_1 + B_2 + B_3\]
+where each matrix $A_i, B_j$ is one of the shift matrices $x$ and $y$ taken to an integer power. For instance, we could choose:
+\[A= x^3 + y + y^2\]
+\[B= y^3 + x + x^2\]
+These matrix polynomials are then used to define parity check matrices $H^X$ and $H^Z$:
 \[H^X = [A | B], \hspace{0.3cm} H^Z = [B^\intercal | A^\intercal].\]
 The dimension of $H^X$ and $H^Z$ is thus $\ell m \times 2 \ell m$. For our purposes, $2 \ell m = n$, the number of physical qubits, and $ \ell m = \frac{n}{2}$, which is the number of vertex and plaquette stabilizers in the grid. 
-We use these two matrices to index which qubits in the grid are to be acted on by stabilizers. Each row contains the qubit indices for a specific stabilizer, and each column is a binary indication of whether a specific qubit in the grid is part of that stabilizer. For instance, in BB code, each row will therefore have six 1s, as each stabilizer acts on six qubits, while the surface code in this notation would have four 1s per row (at most), because each stabilizer acts on only four qubits. The shifting mechanism defined by $A$ and $B$ is the mathematical way to describe the systematic construction of an evenly-spaced pattern repeating throughout the grid. With some appropriate indexing of the grid, we are able to specify the exact qubits to include in each stabilizer, uniquely defining a BB code.
+We use these two matrices to index which qubits in the grid are to be acted on by stabilizers. Each row contains the qubit indices for a specific stabilizer, and each column is a binary indication of whether a specific qubit in the grid is part of that stabilizer. $A$ and $B$ will each have exactly three non-zero entries in each row and column, such that in total, each row and column will have six nonzero entries. This means each stabilizer (row) checks six qubits, and each qubit (column) participates in six checks (three $X$ and three $Z$) \cite{Bravyi2024}.
+If we were to define the surface code in this notation, there would be four 1s per row (at most), because each stabilizer acts on only four qubits. The shifting mechanism defined by $A$ and $B$ is a nice, algebraic way to describe the systematic construction of an evenly-spaced pattern repeating throughout the grid, including nonlocal connections. With some appropriate indexing of the grid, we are able to specify the exact qubits to include in each stabilizer, uniquely defining a BB code.
 
 Measuring a stabilizer corresponds to checking whether the associated parity condition set in the $H^X$ and $H^Z$ matrices is satisfied. Specifically, we require that
 \[
 H^X (H^Z)^\intercal = 0.\]
-This requirement ensures that the stabilizers commute, so that we can apply similar logic as with the standard surface code to identify the stabilizers for which this constraint does not hold, where the anticommutation relation will let us detect stabilizers in the $-1$ eigenstate. The syndrome that is produced informs the corrections we make as a result.
+This requirement ensures that the stabilizers commute, so that we can use a similar procedure as with the standard surface code to identify the stabilizers for which this constraint does not hold, where the anticommutation relation will let us detect stabilizers in the $-1$ eigenstate. The syndrome that is produced informs the corrections we make as a result.
 
 %\supervisorsinline{I'm thinking about adding more details about the decoding process for surface code and/or BB code, which would go here for BB code. Is that necessary?}
 
-It is common to use the notation $[[n, k, d]]$ to specify the parameters of an error correcting code, where $n$ is the number of physical qubits, $k$ is the number of logical qubits we encode, and $d$ is the number of errors the code can correct. IBM, the developer of the BB code, has primarily considered a BB code it calls the \emph{gross} code, after the term for a dozen dozen, known as a gross. Fittingly, its parameters are [[144, 12, 12]]: 144 physical qubits are required to encode 12 qubits, and the code can correct up to 12 errors without issue \cite{Bravyi2024}. With the 1000 to 1 ratio needed for the toric surface code, the gross code (and BB codes in general) offer a clear improvement in this regard. As an additional plus, the connections between qubits in the BB code form a Tanner graph \cite{tannergraphwiki}, which is a bipartite graph that can be separated into two disjoint sets. In this structure, nodes (qubits) within each set are only connected to members of the other, never to one another. This can be useful when physically constructing this architecture, since it allows the hardware to be split cleanly into two separate levels.
+It is common to use the notation $[[n, k, d]]$ to specify the parameters of an error correcting code, where $n$ is the number of physical qubits, $k$ is the number of logical qubits we encode, and $d$ is the number of errors the code can correct. IBM, the developer of the BB code, has primarily considered a BB code it calls the \emph{gross code}, after the term for a dozen dozen, known as a gross. Fittingly, its parameters are [[144, 12, 12]]: 144 physical qubits are required to encode 12 qubits, and the code can correct up to 12 errors without issue \cite{Bravyi2024}. With the 1000-to-1 ratio needed for the toric surface code, the gross code (and BB codes in general) offer a clear improvement in this regard. As an additional plus, the connections between qubits in the BB code form a Tanner graph \cite{tannergraphwiki}, which is a bipartite graph that can be separated into two disjoint sets. In this structure, nodes (qubits) within each set are only connected to members of the other, never to one another. This can be useful when physically constructing this architecture, since it allows the hardware to be split cleanly into two separate levels.%\supervisors{I am looking into expanding on this}.
 
 %Python code for simulating BB codes can be found here: \url{https://github.com/AntonBrekke/BBCODE-QEC-2025/tree/main}.
 %\supervisorsinline{This is where I'll make a subsection discussing tile codes as well if I end up including them. At the moment I'm not sure I'll have time to look into them, so I'll leave it at BB codes.}
 % Tile code somewhat resembles the toric surface code, and are also related to BB codes. However, it does not have  periodic boundary conditions. It has the stabilizers located outside of a ``tile'' of qubits, instead of interspersed between. 
 
 % They have created an algorithm which helps you select which qubits to check (?). 
-
+\newpage
 \section{Fault-tolerant Quantum Computation}
 \subsection{Universal Gate Sets}\label{subsec:universalgates}
-Assuming we have created some scheme for fault-tolerant storage of quantum data, we still face a number of significant challenges before we can perform any fault-tolerant computations. In particular, the \emph{Eastin-Knill theorem} \cite{Eastin_2009,eastinknillwiki} is commonly paraphrased as follows\supervisors{Do I include the formal statement anywhere here? Does it deserve its own appendix chapter? Or do I not include it at all?}:%\footnote{Formal statement: For any nontrivial local-error-detecting-code, the set of logical unitary product operators is not universal.}
+Assuming we have created some scheme for fault-tolerant storage of quantum data, we still face a number of significant challenges before we can perform any fault-tolerant computations. In particular, the \emph{Eastin-Knill theorem} \cite{Eastin_2009,eastinknillwiki} is commonly paraphrased as follows:%\footnote{Formal statement: For any nontrivial local-error-detecting-code, the set of logical unitary product operators is not universal.}
 \begin{center}
     \begin{tikzpicture}
     \node [mybox] (box){%
@@ -306,42 +412,98 @@ Assuming we have created some scheme for fault-tolerant storage of quantum data,
 \end{center}
 %\todo[inline]{I think the key here is that the logical unitary product operators are specifically related to what operators can be expressed and worked with in the stabilizer formalism, which as we know the $T$-gates cannot.}
 
-The full proof of this theorem, given by Eastin and Knill in their paper \cite{Eastin_2009}, relies on group theory and the algebraic properties of the error correcting codes themselves, and is far more rigorous and technical than we need for this project. For our purposes, it is enough to understand that the theorem places restrictions on the fault-tolerant quantum computation architecture. So far, we have not encountered the terms \emph{transversal} and \emph{universal}, but in this chapter, we will define them and argue why they are useful properties for a gate and gate set to have respectively, and thus why the Eastin-Knill theorem is such an important result in quantum computing.
+The full proof of this theorem, given by Eastin and Knill in their paper \cite{Eastin_2009}, relies on group theory and the algebraic properties of the error correcting codes themselves, and is far more rigorous and technical than we need for this project. For our purposes, it is enough to understand that the theorem places restrictions on the fault-tolerant quantum computation architecture. So far, we have not encountered the terms \emph{transversal} and \emph{universal}, but in this section, we will define them and argue why they are useful properties for a gate and gate set to have respectively, and thus why the Eastin-Knill theorem is such an important result in quantum computing.
 
-Before we can fully understand what the theorem is saying, though, we need to delve further into how applying gates to quantum states forms a circuit. For this, we need the concept of a \emph{unitary matrix}, or simply a unitary, which is a norm-preserving matrix $U \in \mathbb{C}^{N \times N}, \hspace{0.2cm} N \in \mathbb{N}$, whose conjugate transpose $U^\dagger$ is also its inverse, meaning $U^\dagger U = UU^\dagger = \mathbb{I}_N$. Mathematically, we can represent any quantum circuit on $n$ qubits with a single unitary matrix.
-\[U \in \mathbb{C}^{2^n \times 2^n}.\]
-While this representation can certainly be useful, like in classical simulations with very few qubits, collapsing the circuit into one matrix in this way generally does not capture a lot of important behaviors and phenomena we are interested in when studying quantum error correction. In hardware, we never apply a single giant unitary gate; instead, as we have seen in the description of Grover's algorithm in \cref{subsec:grovers}, we decompose the computation into smaller, simpler gates. In doing so, we could in principle have our pick from a large selection of possible gates, but if for simplicity we restrict ourselves to implementing only a few different types, we would like the set of gates we choose to be \emph{universal}. A universal gate set can approximate any such unitary $U$ to an arbitrary degree of precision with a finite sequence of gates, an important property for our gate set to have, as without it, there will always be computations we cannot perform.
+Before we can fully understand what the theorem is saying, though, we need to delve further into how applying gates to quantum states forms a circuit. For this, we need the concept of a \emph{unitary matrix}, or simply a unitary, which is a norm-preserving matrix $U \in \mathbb{C}^{N \times N}, \hspace{0.2cm} N \in \mathbb{N}$, whose conjugate transpose $U^\dagger$ is also its inverse, meaning $U^\dagger U = UU^\dagger = \mathbb{I}_N$. Mathematically, we can represent any quantum circuit on $n$ qubits with a single unitary matrix $U \in \mathbb{C}^{2^n \times 2^n}$.
+While this representation can certainly be useful, %like in classical simulations with very few qubits, 
+collapsing the circuit into one matrix in this way generally does not capture a lot of important behaviors and phenomena we are interested in when studying quantum error correction. In hardware, we never apply a single giant unitary gate; instead, as we have seen in the description of Grover's algorithm in \cref{sec:grovers}, we decompose the computation into smaller, simpler gates. In doing so, we could in principle have our pick of a large selection of possible gates, but if for simplicity we restrict ourselves to implementing only a few different types, we would like the set of gates we choose to be \emph{universal}. A universal gate set can approximate any such unitary $U$ to an arbitrary degree of precision with a finite sequence of gates, an important property for our gate set to have, as without it, there will always be computations we cannot perform.
 
-Furthermore, the Eastin-Knill theorem tells us that we cannot have a universal gate set in which every gate is \emph{transversal}. To understand what this means, we need to introduce the concept of a \emph{code block} (or \emph{error-correcting patch}, interchangeably), which is what we collectively call the $n$ physical qubits encoding a single logical qubit in a specific error-correcting code. 
+Furthermore, the Eastin-Knill theorem tells us that we cannot have a universal gate set in which every gate is \emph{transversal}. To understand what this means, we need to introduce the concept of a \emph{code block} (or \emph{error-correcting patch}, interchangeably), which is what we collectively call the $n$ physical qubits encoding one or more logical qubits in a specific error-correcting code. 
 
 \begin{center}
     \begin{tikzpicture}
     \node [mybox] (box){%
         \begin{minipage}{0.85\textwidth}
-            Transversality is a property that a logical gate can have in a specific error-correcting code. A gate $G_L$ acting on $k$ logical qubits is transversal if it acts across the corresponding $k$ code blocks by applying independent physical gates only between qubits at the same position $i$ across blocks, with no coupling between positions $i\neq j$ within any single block:
+A logical gate $G_L$ acting on $k$ logical qubits is said to be \textit{transversal} if it can be implemented by applying independent physical gates between qubits at the same position across code blocks, with no interaction between qubits at different positions within a block. Formally, $G_L$ decomposes as a tensor product over positions:
 \[
-G_L = \bigotimes^n_{i=1} G_i^{(1, 2, ..., k)},
+G_L = \bigotimes^n_{i=1} G_i^{(1, 2, \ldots, k)},
 \]
-where $G_i^{(1, 2, ..., k)}$ acts only on the $i$-th qubit in each of the $k$ blocks.
+where $G_i^{(1, 2, \ldots, k)}$ acts only on the $i$-th qubit in each of the $k$ blocks.
         \end{minipage}
     };
     \node[fancytitle, right=10pt] at (box.north west) {Transversality of a logical gate};
     \end{tikzpicture}%
 \end{center}
 
-\begin{figure}[bt]
+% \begin{figure}[bt]
+%     \centering
+%     \begin{subfigure}[c]{0.3\textwidth}
+%         \centering
+%         \begin{tikzpicture}
+%         \begin{quantikz}[row sep={0.5cm,between origins}, column sep=0.5cm]
+%         \lstick[3]{$\ket{\overline{\psi}}$} & \gate{H} & \qw \\
+%          & \gate{H} & \qw \\
+%          & \gate{H} & \qw \\
+%         \end{quantikz}
+%         \end{tikzpicture}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[c]{0.6\textwidth}
+%         \centering
+%         \begin{tikzpicture}
+%         \begin{quantikz}[row sep={0.5cm,between origins}, column sep=0.5cm]
+%         \lstick[3]{$\ket{\overline{\psi}}$} & \ctrl{4} & \qw & \qw & \qw & \qw \\
+%          & \qw & \ctrl{4} & \qw & \qw & \qw \\
+%          & \qw & \qw & \ctrl{4} & \qw & \qw \\
+%         \setwiretype{n} & & & & & \\
+%         \lstick[3]{$\ket{\overline{\phi}}$} & \targ{} & \qw & \qw & \qw & \qw \\
+%          & \qw & \targ{} & \qw & \qw & \qw \\
+%          & \qw & \qw & \targ{} & \qw & \qw \\
+%         \end{quantikz}
+%         \end{tikzpicture}
+%     \end{subfigure}
+%     \caption{Transversal gates applied to a logical qubit encoded across 3 physical qubits. (Left) A transversal single-qubit gate $H$ applied bitwise. (Right) A transversal CNOT between two logical qubits.}
+%     \label{fig:transversalitydiagram}
+% \end{figure}
+
+The transversal property is illustrated for a single- and multi-qubit gate in \cref{fig:transversalitydiagram}. As the diagram shows, transversal gates ensure single-qubit errors do not propagate to multiple qubits within an error-correcting patch, making them inherently fault-tolerant: A single error occurring when applying the gate will produce at most one error for the error-correcting patch to correct. This is clearly a desirable property for gates in our chosen gate set to have, but the Eastin-Knill theorem describes a fundamental limitation, in that any gate set we choose capable of approximating arbitrary quantum circuits will contain at least one non-transversal gate. It is important to emphasize that transversality is not an inherent property of a gate, but rather a relationship between a gate and a particular error-correcting code. Thus, we would like to choose the error-correcting architecture and gate set in concert, such that the most frequently used gate types are transversal with respect to our chosen code.
+
+\begin{figure}[bt!]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/1BQOv.png}
-    \caption{Illustration of transversality in a single- and multi-qubit gate. \textcolor{red}{TO BE REPLACED WITH MY OWN DIAGRAM.}}\label{fig:transversalitydiagram}
+    % \begin{quantikz}[row sep={0.4cm,between origins}, column sep=0.5cm]
+    % \lstick{$\ket{\psi_1}$} & \ctrl{4} & \qw & \qw & \qw & \qw \\
+    % \lstick{$\ket{\psi_2}$} & \qw & \ctrl{4} & \qw & \qw & \qw \\
+    % \lstick{$\ket{\psi_3}$} & \qw & \qw & \ctrl{4} & \qw & \qw \\
+    % \setwiretype{n} & & & & & \\
+    % \lstick{$\ket{\phi_1}$} & \targ{} & \qw & \qw & \qw & \qw \\
+    % \lstick{$\ket{\phi_2}$} & \qw & \targ{} & \qw & \qw & \qw \\
+    % \lstick{$\ket{\phi_3}$} & \qw & \qw & \targ{} & \qw & \qw \\
+    % \end{quantikz}
+\begin{quantikz}[row sep={0.2cm}, column sep=0.5cm]
+        \lstick[3]{$\ket{\psi_L}$} & \gate{H} & \qw \\
+         & \gate{H} & \qw \\
+         & \gate{H} & \qw \\
+        \end{quantikz}\hspace{1cm}\begin{quantikz}[row sep={0.5cm,between origins}, column sep=0.5cm]
+\lstick[3]{$\ket{\psi_L}$} & \ctrl{4} & \qw & \qw & \qw \\
+ & \qw & \ctrl{4} & \qw & \qw \\
+ & \qw & \qw & \ctrl{4} & \qw \\
+\setwiretype{n} & & & & & \\
+\lstick[3]{$\ket{\phi_L}$} & \targ{} & \qw & \qw & \qw \\
+ & \qw & \targ{} & \qw & \qw  \\
+ & \qw & \qw & \targ{} & \qw \\
+\end{quantikz}
+    \caption{Circuit diagrams of transversal logical gates on a single-qubit gate ($H$) to the left and a multi-qubit gate ($CNOT$) to the right.}
+    \label{fig:transversalitydiagram}          
 \end{figure}
 
-The transversal property is illustrated for a single- and multi-qubit gate in \cref{fig:transversalitydiagram}. As the diagram shows, transversal gates ensure single-qubit errors do not propagate to multiple qubits within an error-correcting patch, making them inherently fault-tolerant: A single error occurring when applying the gate will produce at most one error for the error-correcting patch to correct. This is clearly a desirable property for gates in our chosen gate set to have, but the Eastin-Knill theorem describes a fundamental limitation, in that any gate set we choose capable of approximating arbitrary quantum circuits will contain at least one nontransversal gate. It is important to emphasize that transversality is not an inherent property of a gate, but rather a relationship between a gate and a particular error-correcting code. Thus, we would like to choose the error-correcting architecture and gate set in concert, such that as many commonly used gates as possible are transversal with respect to our chosen code.
+\subsection{Choosing a Gate Set: Clifford+T}\label{subsec:cliffordplust}
+\emph{Clifford+T} is a common choice of universal gate set, fittingly comprised of Clifford and $T$-gates. Clifford gates are unitaries that map Pauli operators to Pauli operators under conjugation, which unlocks some very desirable properties when performing computations in the quantum hardware (as well as when simulating classically, which will be explained in more detail in \cref{sec:stabilizers_in_computation} in relation to our experiments). 
 
-\subsubsection{Choosing a Gate Set: Clifford+T}\label{subsubsec:cliffordplust}
-\emph{Clifford+T} is a common choice of universal gate set, fittingly comprised of \emph{Clifford} and \emph{$T$-gates}. Clifford gates are unitaries that map Pauli operators to Pauli operators under conjugation. Put simply, this trait unlocks some very desirable properties when performing computations in the quantum hardware (as well as when simulating classically, which will be explained in more detail in \cref{sec:stabilizers_in_computation} in relation to our experiments). Recall from \cref{sec:QEC} that the stabilizers $S_i$ are themselves tensor products of Pauli operators, and that the code space is defined by the eigenspace condition $S_i\ket{\psi} = +\ket{\psi}$. If we apply a Clifford gate $C$ and ask whether the updated state $C\ket{\psi}$ still satisfies this condition, we find that the updated stabilizers $CS_iC^\dagger$ are again valid Pauli products simply by the definition of Clifford gates, meaning the code space is preserved. This is the algebraic reason Clifford gates are the natural choice for logical gates in stabilizer codes: They are compatible with the error-correcting architecture by construction.
+Recall from \cref{sec:QEC} that the stabilizers $S_i$ are themselves tensor products of Pauli operators, and that the code space is defined by the eigenspace condition $S_i\ket{\psi} = +\ket{\psi}$. If we apply a Clifford gate $C$ and ask whether the updated state $C\ket{\psi}$ still satisfies this condition, we find that the updated stabilizers $CS_iC^\dagger$ are again valid Pauli products simply by the definition of Clifford gates, meaning the code space is preserved. This is the algebraic reason Clifford gates are the natural choice for logical gates in stabilizer codes: They are compatible with the error-correcting architecture by construction.
 
-In the codes we consider, we can verify gate by gate that the Clifford gates are transversal, or that they decompose into independent single-qubit operations on physical qubits that implement the correct logical operation\todo{I think we can verify transversality of gates in the surface code, but not necessarily in the BB code. Check this and write about it.}\footnote{Verifying the transversality of the Clifford gates in the codes we use is shown in \cref{app:verifying_transversality}.}. %Additionally, both the surface code and BB code introduced in \cref{sec:QEC} belong to a family known as \emph{Calderbank-Shor-Steane} (CSS) codes\todo{source}, defined by the property that stabilizer generators separate cleanly into an $X$-type set and a $Z$-type set with no mixing within a single generator. This is exactly what we see in the structure of $S^X_v$ and $S^Z_p$ in the surface code, and of $H^X$ and $H^Z$ in the BB code. In CSS codes, this separation means Clifford gates map $X$-type stabilizers to $X$-type and $Z$-type to $Z$-type, keeping the correction machinery for each error type independent.
-Together, the code space preservation and transversality that Clifford gates afford in the codes we use make them well-behaved: They stay in the same algebraic space; they have inherent fault-tolerance and a conceptually simple circuit design. %This section is supposed to answer this question: Why can't the stabilizer framework help us simulate it efficiently?
+In the codes we consider, the Clifford gates have been shown to admit fault-tolerant implementations~\cite{Fowler_2012,eberhardt2024logicaloperatorsfoldtransversalgates,sayginel2025faulttolerantlogicalcliffordgates}. For the surface code, the full Clifford group is strictly transversal. For the BB code, it is realized via \emph{fold-transversal} gates, meaning the physical qubits are first permuted according to a code automorphism (a rewiring that maps stabilizers to stabilizers and logical operators to logical operators) and then single-qubit gates are applied independently to each qubit, exactly as in the transversal case. Since no individual operation ever touches more than one qubit, errors cannot propagate, and fold-transversal gates are equally fault-tolerant~\cite{eberhardt2024logicaloperatorsfoldtransversalgates,sayginel2025faulttolerantlogicalcliffordgates}.
+
+Together, the code space preservation and transversality of Clifford gates in these codes make them well-behaved: They stay in the same algebraic space; they have inherent fault-tolerance and a conceptually simple circuit design. %This section is supposed to answer this question: Why can't the stabilizer framework help us simulate it efficiently?
 The $T$-gates, however, given by:
 \[
 T = \begin{pmatrix}
@@ -349,46 +511,17 @@ T = \begin{pmatrix}
 0 & e^{i\pi/4}
 \end{pmatrix},
 \]
-are a different story entirely. To understand why, note that conjugation by $T$ does not preserve the Pauli group:
+require substantially different treatment. To understand why, note that conjugation by $T$ does not preserve the Pauli group:
 \[
 TXT^\dagger = \frac{1}{\sqrt{2}}(X + Y),
 \]
-which is not a Pauli operator, but rather a linear combination of Paulis. This is the fundamental incompatibility: Since stabilizers are by definition Pauli products, any operation that preserves the stabilizer formalism must map Pauli products to Pauli products under conjugation. The $T$-gate violates this requirement, meaning it cannot be implemented by any manipulation of the stabilizer structure alone, and therefore cannot be transversal in the stabilizer codes we consider. This is not merely a consequence of Eastin-Knill, but the deeper algebraic reason behind it: The entire stabilizer framework only supports operations that are automorphisms of the Pauli group, and $T$ is not one of them. However unwieldy $T$-gates may be, though, they are still a requirement for universality, and form a universal gate set along with the Clifford group. They necessitate complicated workarounds to be implemented fault-tolerantly, %owing to the Eastin-Knill restriction, 
-which we return to in \cref{sec:t_gate}.
+which is not a Pauli operator, but rather a linear combination of Paulis. This is the fundamental incompatibility: Since stabilizers are by definition Pauli products, any operation that preserves the stabilizer formalism must map Pauli products to Pauli products under conjugation, and the $T$-gate violates this requirement. This also means the $T$-gate is not transversal in the stabilizer codes we consider. Suppose for contradiction that $T$ were transversal in some stabilizer code with stabilizer group $\mathcal{S}$. If so, $T^{\otimes n}$ would implement a logical gate on the code space, and would therefore be required to preserve $\mathcal{S}$ under conjugation. Both the surface code and the BB code are \emph{Calderbank-Shor-Steane} (CSS) codes \cite{Nielsen_Chuang_2010}, meaning their stabilizer groups consist of purely $X$-type and purely $Z$-type Pauli products. Since $T$ fixes $Z$ exactly ($TZT^\dagger = Z$) but maps $X$ out of the Pauli group, conjugation by $T^{\otimes n}$ maps every $X$-type stabilizer to an object outside the Pauli group, contradicting the requirement that $\mathcal{S}$ be preserved. Hence, $T$ cannot be transversal in the codes we consider.
 
-% \sectionoutline{introduce CSS codes here.
+However unwieldy $T$-gates may be, though, they are still a requirement for universality, and form a universal gate set along with the Clifford group. They necessitate complicated workarounds to be implemented fault-tolerantly, 
+which we return to in \cref{sec:t_gate}.
 
 % so here is what I am still very shaky on and just truly don't understand yet. 
 % applying Clifford gates to codes based on $X$ and $Z$ stabilizers respects the stabilizer structure and code space, and they can be implemented by performing single-qubit operations across all qubits, meaning they are also transversal.
 % are these things two sides of the same coin, or are the fundamentally different? are they transversal BECAUSE they respect the stabilizer structure and code space, or vice versa?
 
-% They are fundamentally different things that happen to coincide for Clifford gates in CSS codes. Don't conflate them.
-% Transversality is a statement about implementation: the gate can be applied by acting independently on each physical qubit with no coupling within a block. It's a property of how you physically execute the gate.
-% Preserving the stabilizer structure is a statement about algebra: conjugation by the gate maps Pauli products to Pauli products, so the stabilizer generators remain valid Pauli strings after the gate is applied. It's a property of what the gate does mathematically.
-% The reason they coincide for Clifford gates in CSS codes is this: because a Clifford gate acts independently on each physical qubit (transversality), and because each such single-qubit action maps Paulis to Paulis (the definition of Clifford), the combined effect on a stabilizer generator — which is a tensor product of single-qubit Paulis — is necessarily another valid Pauli tensor product. Transversality is what allows you to decompose the action qubit by qubit, and the Clifford property is what guarantees each piece stays within the Pauli group. You need both.
-% So neither causes the other. Transversality is the structural reason you can reason qubit by qubit, and the Clifford property is the algebraic reason each qubit-level action stays well-behaved. They work together, and the coincidence of both in CSS codes is exactly why Clifford gates are the natural choice there.}
-
 % The T-gate takes us out of the stabilizer space.\todo{can we introduce this without some of the more formal info i provide in chapter 7?}
-
-
-
-
-
-% \todo[inline]{What is the link between transversality (a logical gate is applied by applying the same gate to its constituent physical qubits individually) and being able to manipulate the stabilizers only in order to alter the logical state the patch contains? By which I mean, why is it that there exists a way for me to mess with the stabilizers and achieve the effect of an X, Y, Z or H gate, but not the T gate? And I know rationally that Eastin-Knill is the answer, since at least one gate is hard, but I don't have a conceptual understanding of why there isn't some manipulation of stabilizers corresponding to the application of the T gate.}
-
-% \aicomment{\textit{ChatGPT's answer:} The clean way to see the connection is to separate three layers: (i) the stabilizer group that \emph{defines} the code space, (ii) logical Pauli operators as nontrivial elements of the normalizer of that stabilizer group, and (iii) logical gates as automorphisms of the code space. In the surface (toric) code, the stabilizers are local $X$-type stars and $Z$-type plaquettes, and the logical operators are noncontractible $X$- and $Z$-strings. A logical unitary is implementable by “manipulating stabilizers” precisely when it corresponds to a symmetry or locality-preserving transformation of this Pauli/stabilizer structure.
-
-% Transversality fits naturally into this picture. A transversal gate acts independently on each physical qubit, so conjugation by the global unitary reduces to conjugation of each local Pauli. If the single-qubit gate maps Pauli operators to Pauli operators (as Clifford gates do), then each stabilizer generator—being a product of Paulis—gets mapped to another Pauli product. In other words, the stabilizer group is mapped to itself (possibly with relabeling), and the code space is preserved. That is why Clifford gates are compatible with transversal implementations in CSS codes like the surface code: their defining algebraic property is that they normalize the Pauli group.
-
-% When you ``manipulate stabilizers'' in the surface code—via code deformation, lattice symmetries, boundary twists, or relabeling $X \leftrightarrow Z$—you are again performing operations that map stabilizer generators to stabilizer generators. Conceptually, you are implementing an automorphism of the stabilizer group. Any such automorphism necessarily induces a transformation on the logical Pauli operators, and because the logical Pauli operators generate the logical Pauli group, the induced logical gate must be a Clifford. This is the essential restriction: stabilizer-preserving transformations can only produce logical operations that send Paulis to Paulis.
-
-% Now consider the $T$ gate. Conjugation by $T$ does not preserve the Pauli group: for example,
-% \[
-% T X T^\dagger = \frac{1}{\sqrt{2}}(X + Y),
-% \]
-% which is not a Pauli operator but a coherent superposition of Paulis. This already tells you something fundamental. If you tried to implement logical $T$ purely by ``messing with stabilizers'', you would need a transformation that sends a logical Pauli operator to a non-Pauli operator while still mapping the stabilizer group to itself. But stabilizers, by definition, are Pauli products. Any operation that preserves the stabilizer formalism must map Pauli products to Pauli products under conjugation. There is simply no room inside that algebraic structure to accommodate the non-Pauli images produced by $T$.
-
-% From a more geometric/topological perspective, the surface code is a two-dimensional topological stabilizer code. Any locality-preserving logical gate corresponds to a topological symmetry of the anyon model underlying the code. In the surface code, those symmetries form exactly the Clifford group. The $T$ gate would require a transformation that mixes topological charge sectors in a way that cannot be realized by a locality-preserving deformation of the lattice or stabilizers. So it is not just that ``at least one gate must be hard'' (Eastin–Knill); it is that the entire stabilizer/topological framework only supports Clifford automorphisms.
-
-% Conceptually, then, the answer is this: manipulating stabilizers works precisely when the desired logical gate is an automorphism of the Pauli/stabilizer structure. Clifford gates have that property; $T$ does not. Because $T$ pushes you outside the Pauli algebra under conjugation, it cannot arise from any transformation that merely reshuffles or locally deforms stabilizers. That algebraic incompatibility is the deep reason you cannot realize $T$ by stabilizer manipulation alone.
-% }

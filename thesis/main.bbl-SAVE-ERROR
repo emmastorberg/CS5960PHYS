@@ -544,6 +544,37 @@
       \verb http://dx.doi.org/10.1103/PhysRevA.60.2746
       \endverb
     \endentry
+    \entry{Nielsen_Chuang_2010}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=afe17482fc813e497188aee3b3783879}{%
+           family={Nielsen},
+           familyi={N\bibinitperiod},
+           given={Michael\bibnamedelima A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=415ddff2f58b25977b1a2dedf18f4501}{%
+           family={Chuang},
+           familyi={C\bibinitperiod},
+           given={Isaac\bibnamedelima L.},
+           giveni={I\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{456599bb4a61c2e997e2a7e1a21b25b4}
+      \strng{fullhash}{456599bb4a61c2e997e2a7e1a21b25b4}
+      \strng{fullhashraw}{456599bb4a61c2e997e2a7e1a21b25b4}
+      \strng{bibnamehash}{456599bb4a61c2e997e2a7e1a21b25b4}
+      \strng{authorbibnamehash}{456599bb4a61c2e997e2a7e1a21b25b4}
+      \strng{authornamehash}{456599bb4a61c2e997e2a7e1a21b25b4}
+      \strng{authorfullhash}{456599bb4a61c2e997e2a7e1a21b25b4}
+      \strng{authorfullhashraw}{456599bb4a61c2e997e2a7e1a21b25b4}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Quantum Computation and Quantum Information: 10th Anniversary Edition}
+      \field{year}{2010}
+    \endentry
     \entry{ibm_quantum_other_code_families}{online}{}{}
       \name{author}{1}{}{%
         {{hash=091825ef571773417253c5c2f9bac796}{%
@@ -594,8 +625,8 @@
       \strng{authornamehash}{34266a35eedbd87dd79c5e408127a5e5}
       \strng{authorfullhash}{34266a35eedbd87dd79c5e408127a5e5}
       \strng{authorfullhashraw}{34266a35eedbd87dd79c5e408127a5e5}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{0003-4916}
@@ -632,8 +663,8 @@
       \strng{authorfullhash}{b6aea1a416c89509a7df1cbb69249cb6}
       \strng{authorfullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
       \field{extraname}{4}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{note}{[Online; accessed 28-January-2026]}
@@ -662,8 +693,8 @@
       \strng{authornamehash}{d41b6b762ef9c65a48d94da625e21c0c}
       \strng{authorfullhash}{d41b6b762ef9c65a48d94da625e21c0c}
       \strng{authorfullhashraw}{d41b6b762ef9c65a48d94da625e21c0c}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{day}{31}
@@ -914,8 +945,8 @@
       \strng{authornamehash}{62c67189021c445ec8b2c95e35200acc}
       \strng{authorfullhash}{62c67189021c445ec8b2c95e35200acc}
       \strng{authorfullhashraw}{62c67189021c445ec8b2c95e35200acc}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{Summer student project report on GitHub}
@@ -1027,65 +1058,6 @@
       \verb https://en.wikipedia.org/w/index.php?title=Eastin%E2%80%93Knill_theorem&oldid=1314440925
       \endverb
     \endentry
-    \entry{synthetiq2025}{misc}{}{}
-      \name{author}{1}{}{%
-        {{hash=cbb6af23e9cd0402b7a349ac96d9e4ab}{%
-           family={eth-sri},
-           familyi={e\bibinithyphendelim s\bibinitperiod}}}%
-      }
-      \strng{namehash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
-      \strng{fullhash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
-      \strng{fullhashraw}{cbb6af23e9cd0402b7a349ac96d9e4ab}
-      \strng{bibnamehash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
-      \strng{authorbibnamehash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
-      \strng{authornamehash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
-      \strng{authorfullhash}{cbb6af23e9cd0402b7a349ac96d9e4ab}
-      \strng{authorfullhashraw}{cbb6af23e9cd0402b7a349ac96d9e4ab}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{howpublished}{Code base, GitHub repository}
-      \field{title}{Synthetiq: Fast and Versatile Quantum Circuit Synthesis}
-      \field{year}{2025}
-      \verb{urlraw}
-      \verb https://github.com/eth-sri/synthetiq
-      \endverb
-      \verb{url}
-      \verb https://github.com/eth-sri/synthetiq
-      \endverb
-    \endentry
-    \entry{Nielsen_Chuang_2010}{book}{}{}
-      \name{author}{2}{}{%
-        {{hash=afe17482fc813e497188aee3b3783879}{%
-           family={Nielsen},
-           familyi={N\bibinitperiod},
-           given={Michael\bibnamedelima A.},
-           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
-        {{hash=415ddff2f58b25977b1a2dedf18f4501}{%
-           family={Chuang},
-           familyi={C\bibinitperiod},
-           given={Isaac\bibnamedelima L.},
-           giveni={I\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
-      }
-      \list{publisher}{1}{%
-        {Cambridge University Press}%
-      }
-      \strng{namehash}{456599bb4a61c2e997e2a7e1a21b25b4}
-      \strng{fullhash}{456599bb4a61c2e997e2a7e1a21b25b4}
-      \strng{fullhashraw}{456599bb4a61c2e997e2a7e1a21b25b4}
-      \strng{bibnamehash}{456599bb4a61c2e997e2a7e1a21b25b4}
-      \strng{authorbibnamehash}{456599bb4a61c2e997e2a7e1a21b25b4}
-      \strng{authornamehash}{456599bb4a61c2e997e2a7e1a21b25b4}
-      \strng{authorfullhash}{456599bb4a61c2e997e2a7e1a21b25b4}
-      \strng{authorfullhashraw}{456599bb4a61c2e997e2a7e1a21b25b4}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{Quantum Computation and Quantum Information: 10th Anniversary Edition}
-      \field{year}{2010}
-    \endentry
     \entry{gottesman1998heisenbergrepresentationquantumcomputers}{misc}{}{}
       \name{author}{1}{}{%
         {{hash=7547b3f3d9b6b3aebccf1577d598b7de}{%
@@ -1152,43 +1124,102 @@
       \verb https://github.com/panqec/panqec
       \endverb
     \endentry
-    \entry{liang2026selfdualbivariatebicyclecodes}{misc}{}{}
+    \entry{eberhardt2024logicaloperatorsfoldtransversalgates}{misc}{}{}
       \name{author}{2}{}{%
-        {{hash=0c44d9082cbefb1dec292950b5685584}{%
-           family={Liang},
-           familyi={L\bibinitperiod},
-           given={Zijian},
-           giveni={Z\bibinitperiod}}}%
-        {{hash=a2d89bb4c55fb1c92905c7f4d4144edd}{%
-           family={Chen},
-           familyi={C\bibinitperiod},
-           given={Yu-An},
-           giveni={Y\bibinithyphendelim A\bibinitperiod}}}%
+        {{hash=cbaade59eee70712229a7657058b6bb1}{%
+           family={Eberhardt},
+           familyi={E\bibinitperiod},
+           given={Jens\bibnamedelima Niklas},
+           giveni={J\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
+        {{hash=e367c5e4c1ebc51516169cc5fbee5c9d}{%
+           family={Steffan},
+           familyi={S\bibinitperiod},
+           given={Vincent},
+           giveni={V\bibinitperiod}}}%
       }
-      \strng{namehash}{707dcb637f114ed7839140a6ae8605c8}
-      \strng{fullhash}{707dcb637f114ed7839140a6ae8605c8}
-      \strng{fullhashraw}{707dcb637f114ed7839140a6ae8605c8}
-      \strng{bibnamehash}{707dcb637f114ed7839140a6ae8605c8}
-      \strng{authorbibnamehash}{707dcb637f114ed7839140a6ae8605c8}
-      \strng{authornamehash}{707dcb637f114ed7839140a6ae8605c8}
-      \strng{authorfullhash}{707dcb637f114ed7839140a6ae8605c8}
-      \strng{authorfullhashraw}{707dcb637f114ed7839140a6ae8605c8}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \strng{namehash}{23e329774a8fad331a60b55d72eb7b5b}
+      \strng{fullhash}{23e329774a8fad331a60b55d72eb7b5b}
+      \strng{fullhashraw}{23e329774a8fad331a60b55d72eb7b5b}
+      \strng{bibnamehash}{23e329774a8fad331a60b55d72eb7b5b}
+      \strng{authorbibnamehash}{23e329774a8fad331a60b55d72eb7b5b}
+      \strng{authornamehash}{23e329774a8fad331a60b55d72eb7b5b}
+      \strng{authorfullhash}{23e329774a8fad331a60b55d72eb7b5b}
+      \strng{authorfullhashraw}{23e329774a8fad331a60b55d72eb7b5b}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{eprintclass}{quant-ph}
       \field{eprinttype}{arXiv}
-      \field{title}{Self-dual bivariate bicycle codes with transversal Clifford gates}
-      \field{year}{2026}
+      \field{title}{Logical Operators and Fold-Transversal Gates of Bivariate Bicycle Codes}
+      \field{year}{2024}
       \verb{eprint}
-      \verb 2510.05211
+      \verb 2407.03973
       \endverb
       \verb{urlraw}
-      \verb https://arxiv.org/abs/2510.05211
+      \verb https://arxiv.org/abs/2407.03973
       \endverb
       \verb{url}
-      \verb https://arxiv.org/abs/2510.05211
+      \verb https://arxiv.org/abs/2407.03973
+      \endverb
+    \endentry
+    \entry{Steane1996}{article}{}{}
+      \list{publisher}{1}{%
+        {The Royal Society}%
+      }
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{issn}{1471-2946}
+      \field{journaltitle}{Proceedings of the Royal Society of London. Series A: Mathematical, Physical and Engineering Sciences}
+      \field{month}{11}
+      \field{number}{1954}
+      \field{volume}{452}
+      \field{year}{1996}
+      \field{pages}{2551\bibrangedash 2577}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.1098/rspa.1996.0136
+      \endverb
+      \verb{urlraw}
+      \verb http://dx.doi.org/10.1098/rspa.1996.0136
+      \endverb
+      \verb{url}
+      \verb http://dx.doi.org/10.1098/rspa.1996.0136
+      \endverb
+    \endentry
+    \entry{eczoo_steane}{incollection}{}{}
+      \name{editor}{2}{}{%
+        {{hash=db0256bf77f3727d8d424c610129db47}{%
+           family={Albert},
+           familyi={A\bibinitperiod},
+           given={Victor\bibnamedelima V.},
+           giveni={V\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=859b6dc81cd3230d4d6154bd9c875bea}{%
+           family={Faist},
+           familyi={F\bibinitperiod},
+           given={Philippe},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{9e5e1fd436ca9050e4ba31a53acd3206}
+      \strng{fullhash}{9e5e1fd436ca9050e4ba31a53acd3206}
+      \strng{fullhashraw}{9e5e1fd436ca9050e4ba31a53acd3206}
+      \strng{bibnamehash}{9e5e1fd436ca9050e4ba31a53acd3206}
+      \strng{editorbibnamehash}{9e5e1fd436ca9050e4ba31a53acd3206}
+      \strng{editornamehash}{9e5e1fd436ca9050e4ba31a53acd3206}
+      \strng{editorfullhash}{9e5e1fd436ca9050e4ba31a53acd3206}
+      \strng{editorfullhashraw}{9e5e1fd436ca9050e4ba31a53acd3206}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{editor}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{The Error Correction Zoo}
+      \field{title}{\([[7,1,3]]\) Steane code}
+      \field{year}{2024}
+      \verb{urlraw}
+      \verb https://errorcorrectionzoo.org/c/steane
+      \endverb
+      \verb{url}
+      \verb https://errorcorrectionzoo.org/c/steane
       \endverb
     \endentry
   \enddatalist

@@ -1,20 +1,29 @@
-BB codes reduce the overhead everywhere, but the fundamental bottleneck identified by Jaques remains, and closing it requires either better magic state distillation protocols or a gate set that avoids T-gates entirely in favor of something less costly. However, we know that it will be more costly than the Clifford gates in any case.
+\chapter{Conclusion}\label{chap:conclusion}
+This thesis set out to test whether Jaques' argument against the quantum threat to AES-128 is specific to the surface code, or whether it survives under a more favorable error-correcting architecture. To probe this, we examined the Bivariate Bicycle code family as an alternative, running experiments and analysis at three levels: quantum memory, transversal gate noise, and magic state distillation.
+
+Before turning to the BB code experiments, the proof-of-concept experiments of \cref{sec:smaller_code_experiments} established two important baselines. First, they confirmed that direct statevector simulation of even the smallest fault-tolerant instance of Grover's algorithm is classically intractable at realistic qubit counts, motivating the stabilizer-based simulation methods used throughout. Second, a working implementation of Grover's algorithm on two Steane-encoded logical qubits under depolarizing noise demonstrated that the logical structure of the algorithm functions correctly under continuous error correction, identifying the target state with probability $\approx 0.6$ after a single iteration---a clear improvement over the uniform distribution that would result from a failed computation, and consistent with theoretical expectations.
+
+We began the exploration of the BB code as an alternative to surface codes by utilizing \texttt{PanQEC} to simulate quantum memory. Here, the BB code offers a clear improvement: At matched logical qubit count and code distance, the surface code requires twelve times as many physical qubits as the gross code for equivalent error protection, confirming the resource advantage that motivates the BB code as an alternative architecture. This advantage persists at the level of gate noise, where the BB code achieves lower logical failure rates than the surface code throughout the practically achievable error rate regime, despite its heavier gate support, because its higher code distance more than compensates. At the level of MSD, \textcite{Xu_2026} show that BB code-based factories achieve comparable space-time volume to surface code factories at a smaller physical qubit footprint, and are particularly well-suited as the second stage in a two-level distillation pipeline.
+
+BB codes therefore reduce the overhead at every level we can measure. And yet, the fundamental bottleneck identified by Jaques remains entirely untouched. The $T$-gate cost of running Grover's algorithm on AES-128 is set by the number of serial $T$-gate operations the circuit requires, currently estimated at around $2^{80}$, and by how long each magic state factory takes to produce a single magic state. The BB code reduces the physical qubit cost of each factory by roughly a factor of twelve, but leaves the cycle cost of magic state production and the total $T$-gate count unchanged. Under the parallelization analysis of \cref{sec:quantum_threat}, meeting even a 50-year runtime threshold requires on the order of 185 million machines, at a total $T$-gate cost of $2^{93.7}$ across all machines. A constant-factor improvement to the per-factory qubit count does not alter this picture.
+
+Jaques' conclusion therefore survives under the assumption of a more resource-efficient architecture. His argument rests on three independent pillars: the physical-to-logical qubit ratio, the cost of fault-tolerant gate implementation, and the poor parallelism of Grover's algorithm. The BB code somewhat weakens the first, and marginally weakens the second via qubit savings in magic state factories. The third is a property of the algorithm itself and is untouched by any architectural choice. Importantly though, none of the three pillars are truly broken. The significance of this result is not that the BB code fails to help, but that it allows us to identify with more confidence where improvement would actually matter: not in the choice of error-correcting code, but in the serial $T$-gate count itself. Closing the gap would require either substantially better MSD protocols, or an error-correcting code whose native transversal gate set admits a more efficient implementation of the AES oracle than Clifford+$T$ does, reducing the dominant term in the resource estimate, not merely its constant factor.
+
 
 
 \section{Future Work}\label{subsec:future_work}
-Quantum storage:
+% Quantum storage:
 
 
-Code distance scaling. How quickly does BB code improve when adding more qubits, compared to the surface code? This might already exist as a number.
+% Code distance scaling. How quickly does BB code improve when adding more qubits, compared to the surface code? This might already exist as a number.
 
-Different noise models: Showing the comparison of BB code vs surface code for more complicated noise models.
+% Different noise models: Showing the comparison of BB code vs surface code for more complicated noise models.
 
-Does the decoder we use for correcting errors matter at all and what is the efficiency/accuracy tradeoff? Is the BB code advantage robust under decoders?
+% Does the decoder we use for correcting errors matter at all and what is the efficiency/accuracy tradeoff? Is the BB code advantage robust under decoders?
 
-\section{Declaration of AI Usage}
-\todo[inline]{Rewrite this section into formal text.}
-I have used AI as an aid in coding and will probably continue to do so.\\
-I use it to learn things sometimes and provide intuitive explanations where I otherwise just have equations to study.\\
-I use it very minimally when writing, pretty much just when I can't remember a certain word or if I've used a word a lot and need a synonym (like a thesaurus).\\
-I use it as a search engine when I have complicated search terms that Google can't find for me.\\
-I ask it to format references from websites etc when there is not a downloadable option provided by the authors.\\
+% Noise on measurement/reset. Currently only gate operations are noisy. In real hardware, measurement and qubit reset are among the noisiest operations. Qiskit Aer supports ReadoutError for measurement and noise on reset. Without this, EC experiment looks better than it would in practice.
+Several natural extensions of this work remain unexplored. First, the memory threshold experiment of \cref{subsec:panqec_memory} utilized a simple depolarizing noise model. Extending the comparison between the BB code and the surface code to more realistic noise models (including correlated errors, measurement noise, and qubit reset errors~\cite{Heu_en_2024, gehér2025resetresetquestion}) would give a more accurate picture of the architectural trade-offs in practice. In particular, measurement and qubit reset are among the noisiest operations in real superconducting hardware~\cite{Heu_en_2024}, and omitting them causes the error correction results to appear more favorable than they would be on physical devices.
+
+Second, the gate noise experiment of \cref{sec:panqec_gates} used a fixed system size of $n = 98$ physical qubits. A natural follow-up is a code distance scaling study: How does the logical failure rate of the BB code improve as qubits are added, compared to the surface code? This would clarify whether the advantage observed here is robust as the codes scale, and could be compared against existing theoretical predictions.
+
+Third, all experiments in this thesis used the BP+LSD decoder. The BB code advantage observed in \cref{sec:panqec_gates} depends on the decoder's ability to correctly identify minimum-weight error patterns on a non-geometrically-local code, which is a harder decoding problem than for the surface code. Whether this advantage is robust across different decoders, and what efficiency and accuracy trade-offs different decoding strategies introduce for BB codes specifically, is an open question with direct relevance to practical implementation.

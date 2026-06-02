@@ -4,6 +4,8 @@
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 
+%\setcounter{tocdepth}{3}
+
 \tikzstyle{mybox} = [draw=blue!60, fill=blue!10, very thick,
     rectangle, rounded corners, inner sep=10pt, inner ysep=20pt]
 \tikzstyle{fancytitle} =[fill=blue!60, text=white]
@@ -23,6 +25,12 @@
 \newcommand{\aicomment}[1]{%
   \todo[inline,color=yellow!50,linecolor=yellow!90]{#1}%
 }
+
+% AI-generated text — wrap prose in \aitext{}, or use {\color{aicolor} ...} for
+% blocks that contain environments (enumerate, table, figure, etc.).
+% Remove the colour wrapper when you accept the text as your own.
+\colorlet{aicolor}{teal!70!black}
+\newcommand{\aitext}[1]{{\color{aicolor}#1}}
 
 \crefname{appendix}{Appendix}{Appendices}
 \Crefname{appendix}{Appendix}{Appendices}
